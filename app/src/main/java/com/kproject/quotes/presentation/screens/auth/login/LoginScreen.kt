@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +17,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -79,9 +84,46 @@ private fun MainContent(
         Spacer(Modifier.height(heightSpacing))
         AuthButton(
             text = stringResource(id = R.string.login),
-            onClick = onNavigateToSignUpScreen
+            onClick = {}
+        )
+        Spacer(Modifier.height(32.dp))
+        SignUpText(
+            onNavigateToSignUpScreen = onNavigateToSignUpScreen
         )
     }
+}
+
+@Composable
+private fun SignUpText(onNavigateToSignUpScreen: () -> Unit) {
+    val tag = stringResource(id = R.string.signup)
+    val annotatedText = buildAnnotatedString {
+        append(stringResource(id = R.string.dont_have_an_account) + " ")
+        pushStringAnnotation(
+            tag = tag,
+            annotation = "https://developer.android.com"
+        )
+        withStyle(
+            style = SpanStyle(color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold)
+        ) {
+            append(stringResource(id = R.string.signup))
+        }
+        pop()
+    }
+
+    ClickableText(
+        text = annotatedText,
+        style = TextStyle(
+            color = MaterialTheme.colorScheme.onPrimary,
+            fontSize = 16.sp
+        ),
+        onClick = { offset ->
+            annotatedText.getStringAnnotations(
+                tag = tag, start = offset, end = offset
+            ).firstOrNull()?.let { annotation ->
+                onNavigateToSignUpScreen()
+            }
+        }
+    )
 }
 
 @Preview
