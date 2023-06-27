@@ -55,7 +55,7 @@ private fun MainContent(
             .padding(DefaultScreenPadding)
     ) {
         Text(
-            text = "Login",
+            text = stringResource(id = R.string.login),
             color = MaterialTheme.colorScheme.onPrimary,
             fontSize = 38.sp,
             fontWeight = FontWeight.ExtraBold

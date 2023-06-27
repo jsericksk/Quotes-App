@@ -42,7 +42,7 @@ fun SignUpScreen(
     onNavigateToHomeScreen: () -> Unit,
     onNavigateBack: () -> Unit
 ) {
-    MainContent(onNavigateBack = {})
+    MainContent(onNavigateBack = onNavigateBack)
 }
 
 @Composable
@@ -88,7 +88,7 @@ private fun MainContent(
                 .verticalScroll(rememberScrollState())
         ) {
             Text(
-                text = "SignUp",
+                text = stringResource(id = R.string.signup),
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 38.sp,
                 fontWeight = FontWeight.ExtraBold
@@ -126,7 +126,7 @@ private fun MainContent(
             )
             Spacer(Modifier.height(heightSpacing))
             AuthButton(
-                text = "Login",
+                text = stringResource(id = R.string.signup),
                 onClick = {}
             )
         }
