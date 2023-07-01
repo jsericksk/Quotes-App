@@ -17,17 +17,8 @@ import com.kproject.quotes.presentation.screens.home.HomeScreen
 fun NavigationGraph() {
     val navController = rememberAnimatedNavController()
 
-    AnimatedNavHost(navController = navController, startDestination = Screen.HomeScreen.route) {
-        composable(route = Screen.HomeScreen.route) {
-            HomeScreen(
-               onNavigateToLoginScreen = {}
-            )
-        }
-
-        // LoginScreen
-        composable(
-            route = Screen.LoginScreen.route,
-        ) {
+    AnimatedNavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
+        composable(route = Screen.LoginScreen.route) {
             LoginScreen(
                 onNavigateToHomeScreen = {
                     navController.navigateWithPopUp(
@@ -38,6 +29,15 @@ fun NavigationGraph() {
                 onNavigateToSignUpScreen = {
                     navController.navigate(Screen.SignUpScreen.route)
                 }
+            )
+        }
+
+        // HomeScreen
+        composable(
+            route = Screen.HomeScreen.route,
+        ) {
+            HomeScreen(
+                onNavigateToLoginScreen = {}
             )
         }
 

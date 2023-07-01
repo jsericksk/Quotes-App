@@ -38,6 +38,7 @@ fun LoginScreen(
     onNavigateToSignUpScreen: () -> Unit,
 ) {
     MainContent(
+        onNavigateToHomeScreen = onNavigateToHomeScreen,
         onNavigateToSignUpScreen = onNavigateToSignUpScreen
     )
 }
@@ -45,7 +46,8 @@ fun LoginScreen(
 @Composable
 private fun MainContent(
     modifier: Modifier = Modifier,
-    onNavigateToSignUpScreen: () -> Unit
+    onNavigateToHomeScreen: () -> Unit,
+    onNavigateToSignUpScreen: () -> Unit,
 ) {
     val heightSpacing = 24.dp
 
@@ -84,7 +86,7 @@ private fun MainContent(
         Spacer(Modifier.height(heightSpacing))
         AuthButton(
             text = stringResource(id = R.string.login),
-            onClick = {}
+            onClick = onNavigateToHomeScreen
         )
         Spacer(Modifier.height(32.dp))
         SignUpText(
