@@ -11,4 +11,8 @@
     <string name="signup">SignUp</string>
     <string name="dont_have_an_account">Don\'t have an account?</string>
 
+    <string name="email_not_available">Email not available</string>
+    <string name="username_not_available">Username not available</string>
+
+
 </resources>
