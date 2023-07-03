@@ -3,7 +3,7 @@ package com.kproject.quotes.data.repository.auth
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.kproject.quotes.commom.ResultState
-import com.kproject.quotes.commom.exception.AuthenticationException
+import com.kproject.quotes.commom.exception.AuthException
 import com.kproject.quotes.data.remote.model.ErrorResponse
 import com.kproject.quotes.data.remote.service.AuthApiService
 import com.kproject.quotes.domain.model.auth.Login
@@ -34,20 +34,20 @@ class AuthRepositoryImpl(
                     errorResponse?.let { error ->
                         when (error.errorCode) {
                             EmailNotAvailableCode -> {
-                                emit(ResultState.Error(AuthenticationException.EmailNotAvailableException))
+                                emit(ResultState.Error(AuthException.EmailNotAvailableException))
                             }
                             UsernameNotAvailableCode -> {
-                                emit(ResultState.Error(AuthenticationException.UsernameNotAvailableException))
+                                emit(ResultState.Error(AuthException.UsernameNotAvailableException))
                             }
                             else -> {
-                                emit(ResultState.Error(AuthenticationException.UnknownSignUpException))
+                                emit(ResultState.Error(AuthException.UnknownSignUpException))
                             }
                         }
                     }
                 }
             }
         } catch (e: Exception) {
-            emit(ResultState.Error(AuthenticationException.UnknownSignUpException))
+            emit(ResultState.Error(AuthException.UnknownSignUpException))
         }
     }
 
@@ -60,16 +60,16 @@ class AuthRepositoryImpl(
                     tokenManagerRepository.accessToken = tokensResponse.accessToken
                     tokenManagerRepository.refreshToken = tokensResponse.refreshToken
                     emit(ResultState.Success())
-                } ?: emit(ResultState.Error(AuthenticationException.UnknownLoginException))
+                } ?: emit(ResultState.Error(AuthException.UnknownLoginException))
             } else {
                 if (response.code() == 401) {
-                    emit(ResultState.Error(AuthenticationException.WrongEmailOrPasswordException))
+                    emit(ResultState.Error(AuthException.WrongEmailOrPasswordException))
                     return@flow
                 }
-                emit(ResultState.Error(AuthenticationException.UnknownLoginException))
+                emit(ResultState.Error(AuthException.UnknownLoginException))
             }
         } catch (e: Exception) {
-            emit(ResultState.Error(AuthenticationException.UnknownLoginException))
+            emit(ResultState.Error(AuthException.UnknownLoginException))
         }
     }
 }
