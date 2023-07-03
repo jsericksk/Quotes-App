@@ -86,7 +86,10 @@ dependencies {
     // Security - for EncryptedSharedPreferences
     implementation("androidx.security:security-crypto:1.0.0")
 
-    // Gson
+    // Retrofit
+    def retrofit_version = "2.9.0"
+    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
     implementation "com.google.code.gson:gson:2.10"
 
     // Splash Screen
