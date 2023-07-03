@@ -9,5 +9,4 @@ sealed class ValidationState {
     object RepeatedPasswordDoesNotMatch : ValidationState()
     object EmptyUsername : ValidationState()
     object InvalidUsername : ValidationState()
-    object ProfilePictureNotSelected : ValidationState()
 }
