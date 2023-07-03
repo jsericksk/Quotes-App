@@ -5,6 +5,7 @@ import com.kproject.quotes.data.remote.auth.AuthAuthenticator
 import com.kproject.quotes.data.remote.auth.AuthInterceptor
 import com.kproject.quotes.data.remote.service.ApiConstants
 import com.kproject.quotes.data.remote.service.AuthApiService
+import com.kproject.quotes.data.remote.service.QuotesApiService
 import com.kproject.quotes.data.repository.auth.TokenManagerRepository
 import dagger.Module
 import dagger.Provides
@@ -30,7 +31,7 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(tokenManagerRepository: TokenManagerRepository): OkHttpClient {
+    fun provideCustomOkHttpClient(tokenManagerRepository: TokenManagerRepository): OkHttpClient {
         val authInterceptor = AuthInterceptor(tokenManagerRepository)
         val authAuthenticator = AuthAuthenticator(tokenManagerRepository)
         return OkHttpClient.Builder()
@@ -43,9 +44,22 @@ class DataModule {
     @Singleton
     fun provideAuthApiService(): AuthApiService {
         val retrofit = Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(ApiConstants.BaseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
         return retrofit.create(AuthApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideQuotesApiService(
+        customOkHttpClient: OkHttpClient
+    ): QuotesApiService {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(ApiConstants.BaseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(customOkHttpClient)
+            .build()
+        return retrofit.create(QuotesApiService::class.java)
     }
 }
