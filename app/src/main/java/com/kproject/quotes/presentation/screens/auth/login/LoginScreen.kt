@@ -10,12 +10,10 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -25,10 +23,14 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kproject.quotes.R
+import com.kproject.quotes.commom.ResultState
 import com.kproject.quotes.presentation.screens.auth.components.AuthButton
 import com.kproject.quotes.presentation.screens.auth.components.FieldType
 import com.kproject.quotes.presentation.screens.auth.components.TextField
+import com.kproject.quotes.presentation.screens.components.ProgressAlertDialog
+import com.kproject.quotes.presentation.screens.components.SimpleAlertDialog
 import com.kproject.quotes.presentation.theme.DefaultScreenPadding
 import com.kproject.quotes.presentation.theme.PreviewTheme
 
@@ -37,22 +39,48 @@ fun LoginScreen(
     onNavigateToHomeScreen: () -> Unit,
     onNavigateToSignUpScreen: () -> Unit,
 ) {
+    val context = LocalContext.current
+    val loginViewModel: LoginViewModel = hiltViewModel()
+    val uiState = loginViewModel.uiState
+    val loginState = loginViewModel.loginState
+
     MainContent(
-        onNavigateToHomeScreen = onNavigateToHomeScreen,
-        onNavigateToSignUpScreen = onNavigateToSignUpScreen
+        onNavigateToSignUpScreen = onNavigateToSignUpScreen,
+        uiState = uiState,
+        onUiEvent = loginViewModel::onUiEvent,
+        onLoginButtonClick = {
+            loginViewModel.login()
+        }
+    )
+
+    LaunchedEffect(loginState) {
+        if (loginState is ResultState.Success) {
+            onNavigateToHomeScreen.invoke()
+        }
+    }
+
+    ProgressAlertDialog(showDialog = uiState.isLoading)
+
+    SimpleAlertDialog(
+        showDialog = uiState.loginError,
+        onDismiss = {
+            loginViewModel.onUiEvent(LoginUiEvent.OnDismissErrorDialog)
+        },
+        title = stringResource(id = R.string.error),
+        message = uiState.loginErrorMessage.asString(),
+        showButtonCancel = false,
+        onClickButtonOk = {}
     )
 }
 
 @Composable
 private fun MainContent(
-    modifier: Modifier = Modifier,
-    onNavigateToHomeScreen: () -> Unit,
+    uiState: LoginUiState,
     onNavigateToSignUpScreen: () -> Unit,
+    onUiEvent: (LoginUiEvent) -> Unit,
+    onLoginButtonClick: () -> Unit,
 ) {
     val heightSpacing = 24.dp
-
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -69,24 +97,30 @@ private fun MainContent(
         )
         Spacer(Modifier.height(50.dp))
         TextField(
-            value = email,
-            onValueChange = { newValue -> email = newValue },
+            value = uiState.email,
+            onValueChange = { value ->
+                onUiEvent.invoke(LoginUiEvent.EmailChanged(value))
+            },
             hint = stringResource(id = R.string.email),
             leadingIcon = R.drawable.outline_email_24,
-            fieldType = FieldType.Email
+            fieldType = FieldType.Email,
+            errorMessage = uiState.emailError.asString()
         )
         Spacer(Modifier.height(heightSpacing))
         TextField(
-            value = password,
-            onValueChange = { newValue -> password = newValue },
+            value = uiState.password,
+            onValueChange = { value ->
+                onUiEvent.invoke(LoginUiEvent.PasswordChanged(value))
+            },
             hint = stringResource(id = R.string.password),
             leadingIcon = R.drawable.outline_key_24,
-            fieldType = FieldType.Password
+            fieldType = FieldType.Password,
+            errorMessage = uiState.passwordError.asString()
         )
         Spacer(Modifier.height(heightSpacing))
         AuthButton(
             text = stringResource(id = R.string.login),
-            onClick = onNavigateToHomeScreen
+            onClick = onLoginButtonClick
         )
         Spacer(Modifier.height(32.dp))
         SignUpText(
@@ -132,9 +166,11 @@ private fun SignUpText(onNavigateToSignUpScreen: () -> Unit) {
 @Composable
 private fun Preview() {
     PreviewTheme {
-        LoginScreen(
-            onNavigateToHomeScreen = {},
-            onNavigateToSignUpScreen = {}
+        MainContent(
+            uiState = LoginUiState(),
+            onNavigateToSignUpScreen = {},
+            onUiEvent = {},
+            onLoginButtonClick = {}
         )
     }
 }
