@@ -6,7 +6,9 @@ import com.kproject.quotes.data.remote.auth.AuthInterceptor
 import com.kproject.quotes.data.remote.service.ApiConstants
 import com.kproject.quotes.data.remote.service.AuthApiService
 import com.kproject.quotes.data.remote.service.QuotesApiService
+import com.kproject.quotes.data.repository.auth.AuthRepositoryImpl
 import com.kproject.quotes.data.repository.auth.TokenManagerRepository
+import com.kproject.quotes.domain.repository.auth.AuthRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,14 +22,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class DataModule {
-
-    @Provides
-    @Singleton
-    fun provideTokenManagerRepository(
-        @ApplicationContext applicationContext: Context
-    ): TokenManagerRepository {
-        return TokenManagerRepository(applicationContext)
-    }
 
     @Provides
     @Singleton
@@ -52,14 +46,29 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideQuotesApiService(
-        customOkHttpClient: OkHttpClient
-    ): QuotesApiService {
+    fun provideQuotesApiService(customOkHttpClient: OkHttpClient): QuotesApiService {
         val retrofit = Retrofit.Builder()
             .baseUrl(ApiConstants.BaseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .client(customOkHttpClient)
             .build()
         return retrofit.create(QuotesApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTokenManagerRepository(
+        @ApplicationContext applicationContext: Context
+    ): TokenManagerRepository {
+        return TokenManagerRepository(applicationContext)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthRepository(
+        tokenManagerRepository: TokenManagerRepository,
+        authApiService: AuthApiService
+    ): AuthRepository {
+        return AuthRepositoryImpl(tokenManagerRepository, authApiService)
     }
 }
