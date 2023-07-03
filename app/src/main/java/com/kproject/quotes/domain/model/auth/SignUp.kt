@@ -1,4 +1,4 @@
-package com.kproject.quotes.domain.model
+package com.kproject.quotes.domain.model.auth
 
 data class SignUp(
     val email: String = "",
