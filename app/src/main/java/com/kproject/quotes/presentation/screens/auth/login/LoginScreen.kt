@@ -136,7 +136,7 @@ private fun SignUpText(onNavigateToSignUpScreen: () -> Unit) {
         append(stringResource(id = R.string.dont_have_an_account) + " ")
         pushStringAnnotation(
             tag = tag,
-            annotation = "https://developer.android.com"
+            annotation = "signup"
         )
         withStyle(
             style = SpanStyle(color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold)

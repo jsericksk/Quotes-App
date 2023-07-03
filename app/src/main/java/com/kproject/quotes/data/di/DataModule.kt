@@ -6,9 +6,11 @@ import com.kproject.quotes.data.remote.auth.AuthInterceptor
 import com.kproject.quotes.data.remote.service.ApiConstants
 import com.kproject.quotes.data.remote.service.AuthApiService
 import com.kproject.quotes.data.remote.service.QuotesApiService
+import com.kproject.quotes.data.repository.PreferenceRepositoryImpl
 import com.kproject.quotes.data.repository.auth.AuthRepositoryImpl
 import com.kproject.quotes.data.repository.auth.TokenManagerRepository
-import com.kproject.quotes.domain.repository.auth.AuthRepository
+import com.kproject.quotes.domain.repository.AuthRepository
+import com.kproject.quotes.domain.repository.PreferenceRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -70,5 +72,11 @@ class DataModule {
         authApiService: AuthApiService
     ): AuthRepository {
         return AuthRepositoryImpl(tokenManagerRepository, authApiService)
+    }
+
+    @Provides
+    @Singleton
+    fun providePreferenceRepository(@ApplicationContext applicationContext: Context): PreferenceRepository {
+        return PreferenceRepositoryImpl(applicationContext)
     }
 }

@@ -8,7 +8,7 @@ import com.kproject.quotes.data.remote.model.ErrorResponse
 import com.kproject.quotes.data.remote.service.AuthApiService
 import com.kproject.quotes.domain.model.auth.Login
 import com.kproject.quotes.domain.model.auth.SignUp
-import com.kproject.quotes.domain.repository.auth.AuthRepository
+import com.kproject.quotes.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

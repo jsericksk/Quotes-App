@@ -1,4 +1,4 @@
-package com.kproject.quotes.domain.repository.auth
+package com.kproject.quotes.domain.repository
 
 import com.kproject.quotes.commom.ResultState
 import com.kproject.quotes.domain.model.auth.Login

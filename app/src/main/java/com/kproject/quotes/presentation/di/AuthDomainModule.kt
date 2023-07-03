@@ -1,6 +1,6 @@
 package com.kproject.quotes.presentation.di
 
-import com.kproject.quotes.domain.repository.auth.AuthRepository
+import com.kproject.quotes.domain.repository.AuthRepository
 import com.kproject.quotes.domain.usecase.auth.LoginUseCase
 import com.kproject.quotes.domain.usecase.auth.SignUpUseCase
 import com.kproject.quotes.domain.usecase.auth.validation.EmailValidator
