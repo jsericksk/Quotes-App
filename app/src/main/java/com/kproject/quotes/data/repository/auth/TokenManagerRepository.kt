@@ -7,7 +7,7 @@ import androidx.security.crypto.MasterKeys
 import com.kproject.quotes.commom.constants.PrefsConstants
 import dagger.hilt.android.qualifiers.ApplicationContext
 
-class TokenManagerRepositoryImpl(
+class TokenManagerRepository(
     @ApplicationContext private val context: Context,
 ) {
     private val sharedPreferences: SharedPreferences
