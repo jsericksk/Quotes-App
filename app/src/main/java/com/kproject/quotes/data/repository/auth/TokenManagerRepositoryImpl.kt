@@ -1,4 +1,4 @@
-package com.kproject.quotes.data.repository
+package com.kproject.quotes.data.repository.auth
 
 import android.content.Context
 import android.content.SharedPreferences
