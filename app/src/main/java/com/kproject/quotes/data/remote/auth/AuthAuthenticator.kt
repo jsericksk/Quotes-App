@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class AuthAuthenticator(
     private val tokenManagerRepository: TokenManagerRepository
-): Authenticator {
+) : Authenticator {
 
     override fun authenticate(route: Route?, response: Response): Request? {
         val currentRefreshToken = tokenManagerRepository.refreshToken
