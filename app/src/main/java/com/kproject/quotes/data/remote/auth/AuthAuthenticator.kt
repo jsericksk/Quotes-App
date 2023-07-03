@@ -1,7 +1,7 @@
 package com.kproject.quotes.data.remote.auth
 
-import com.kproject.quotes.data.remote.model.RefreshTokenBody
-import com.kproject.quotes.data.remote.model.TokensResponse
+import com.kproject.quotes.data.remote.model.auth.RefreshTokenBody
+import com.kproject.quotes.data.remote.model.auth.TokensResponse
 import com.kproject.quotes.data.remote.service.ApiConstants
 import com.kproject.quotes.data.remote.service.AuthApiService
 import com.kproject.quotes.data.repository.auth.TokenManagerRepository

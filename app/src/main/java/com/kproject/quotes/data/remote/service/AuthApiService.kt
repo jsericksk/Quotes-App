@@ -1,7 +1,7 @@
 package com.kproject.quotes.data.remote.service
 
-import com.kproject.quotes.data.remote.model.RefreshTokenBody
-import com.kproject.quotes.data.remote.model.TokensResponse
+import com.kproject.quotes.data.remote.model.auth.RefreshTokenBody
+import com.kproject.quotes.data.remote.model.auth.TokensResponse
 import com.kproject.quotes.domain.model.auth.Login
 import com.kproject.quotes.domain.model.auth.SignUp
 import retrofit2.Call
