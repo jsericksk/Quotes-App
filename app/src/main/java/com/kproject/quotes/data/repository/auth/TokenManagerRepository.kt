@@ -10,10 +10,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 class TokenManagerRepository(
     @ApplicationContext private val context: Context,
 ) {
-    private val sharedPreferences: SharedPreferences
-
-    init {
-        sharedPreferences = initializeEncryptedSharedPreferences()
+    private val sharedPreferences: SharedPreferences by lazy {
+        initializeEncryptedSharedPreferences()
     }
 
     private fun initializeEncryptedSharedPreferences(): SharedPreferences {
@@ -27,19 +25,11 @@ class TokenManagerRepository(
         )
     }
 
-    fun saveAccessToken(accessToken: String) {
-        sharedPreferences.edit().putString(PrefsConstants.AccessToken, accessToken).apply()
-    }
+    var accessToken: String
+        get() = sharedPreferences.getString(PrefsConstants.AccessToken, "") ?: ""
+        set(value) = sharedPreferences.edit().putString(PrefsConstants.AccessToken, value).apply()
 
-    fun saveRefreshToken(refreshToken: String) {
-        sharedPreferences.edit().putString(PrefsConstants.RefreshToken, refreshToken).apply()
-    }
-
-    fun getAccessToken(): String {
-        return sharedPreferences.getString(PrefsConstants.AccessToken, "") ?: ""
-    }
-
-    fun getRefreshToken(): String {
-        return sharedPreferences.getString(PrefsConstants.RefreshToken, "") ?: ""
-    }
+    var refreshToken: String
+        get() = sharedPreferences.getString(PrefsConstants.RefreshToken, "") ?: ""
+        set(value) = sharedPreferences.edit().putString(PrefsConstants.RefreshToken, value).apply()
 }
