@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -39,7 +38,6 @@ fun LoginScreen(
     onNavigateToHomeScreen: () -> Unit,
     onNavigateToSignUpScreen: () -> Unit,
 ) {
-    val context = LocalContext.current
     val loginViewModel: LoginViewModel = hiltViewModel()
     val uiState = loginViewModel.uiState
     val loginState = loginViewModel.loginState
@@ -95,7 +93,9 @@ private fun MainContent(
             fontSize = 38.sp,
             fontWeight = FontWeight.ExtraBold
         )
+
         Spacer(Modifier.height(50.dp))
+
         TextField(
             value = uiState.email,
             onValueChange = { value ->
@@ -106,7 +106,9 @@ private fun MainContent(
             fieldType = FieldType.Email,
             errorMessage = uiState.emailError.asString()
         )
+
         Spacer(Modifier.height(heightSpacing))
+
         TextField(
             value = uiState.password,
             onValueChange = { value ->
@@ -117,12 +119,16 @@ private fun MainContent(
             fieldType = FieldType.Password,
             errorMessage = uiState.passwordError.asString()
         )
+
         Spacer(Modifier.height(heightSpacing))
+
         AuthButton(
             text = stringResource(id = R.string.login),
             onClick = onLoginButtonClick
         )
+
         Spacer(Modifier.height(32.dp))
+
         SignUpText(
             onNavigateToSignUpScreen = onNavigateToSignUpScreen
         )
