@@ -28,6 +28,8 @@
     <string name="error_signup">There was an error trying to register.</string>
     <string name="error_email_not_available">Email not available.</string>
     <string name="error_username_not_available">Username not available.</string>
+    <string name="error_when_trying_to_auto_login">Your account was created successfully, but there
+        was an error trying to auto-login. Try logging in again at the login screen.</string>
 
 
 </resources>
