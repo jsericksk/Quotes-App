@@ -22,7 +22,7 @@
     <string name="error_passwords_does_not_match">The passwords does not match</string>
     <string name="error_username_empty">Username cannot be empty</string>
     <string name="error_invalid_username">Username must be a minimum of 3 characters and a maximum of 50</string>
-    <string name="error_email_or_password_is_wrong">Your email or password is wrong.</string>
+    <string name="error_wrong_email_or_password">Wrong email or password.</string>
     <string name="error_login">There was an error trying to login.</string>
     <string name="error_signup">There was an error trying to register.</string>
     <string name="error_email_not_available">Email not available.</string>

@@ -23,6 +23,7 @@ fun BaseException.toAuthErrorMessage(): UiText  {
     return when (this) {
         AuthException.EmailNotAvailableException -> UiText.StringResource(R.string.error_email_not_available)
         AuthException.UsernameNotAvailableException -> UiText.StringResource(R.string.error_username_not_available)
+        AuthException.WrongEmailOrPasswordException -> UiText.StringResource(R.string.error_wrong_email_or_password)
         AuthException.UnknownLoginException -> UiText.StringResource(R.string.error_login)
         AuthException.UnknownSignUpException -> UiText.StringResource(R.string.error_signup)
         else -> UiText.StringResource(R.string.unknown_error)
