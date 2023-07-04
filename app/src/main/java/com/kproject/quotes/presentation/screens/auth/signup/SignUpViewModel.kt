@@ -46,22 +46,18 @@ class SignUpViewModel @Inject constructor(
                 uiState = uiState.copy(email = event.email)
                 validateFieldsWhenTyping()
             }
-
             is SignUpUiEvent.UsernameChanged -> {
                 uiState = uiState.copy(username = event.username)
                 validateFieldsWhenTyping()
             }
-
             is SignUpUiEvent.PasswordChanged -> {
                 uiState = uiState.copy(password = event.password)
                 validateFieldsWhenTyping()
             }
-
             is SignUpUiEvent.RepeatedPasswordChanged -> {
                 uiState = uiState.copy(repeatedPassword = event.repeatedPassword)
                 validateFieldsWhenTyping()
             }
-
             is SignUpUiEvent.OnDismissErrorDialog -> {
                 uiState = uiState.copy(signUpError = false)
             }
@@ -80,11 +76,9 @@ class SignUpViewModel @Inject constructor(
                         is ResultState.Loading -> {
                             uiState = uiState.copy(isLoading = true)
                         }
-
                         is ResultState.Success -> {
                             autoLogin()
                         }
-
                         is ResultState.Error -> {
                             result.exception?.let { exception ->
                                 uiState = uiState.copy(
@@ -113,7 +107,6 @@ class SignUpViewModel @Inject constructor(
                             value = true
                         )
                     }
-
                     is ResultState.Error -> {
                         uiState = uiState.copy(
                             isLoading = false,
@@ -121,7 +114,6 @@ class SignUpViewModel @Inject constructor(
                             signUpErrorMessage = UiText.StringResource(R.string.error_when_trying_to_auto_login)
                         )
                     }
-
                     else -> {}
                 }
             }

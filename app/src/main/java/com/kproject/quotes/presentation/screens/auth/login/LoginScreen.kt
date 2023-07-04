@@ -67,6 +67,7 @@ fun LoginScreen(
         title = stringResource(id = R.string.error),
         message = uiState.loginErrorMessage.asString(),
         showButtonCancel = false,
+        cancelable = false,
         onClickButtonOk = {}
     )
 }
@@ -145,7 +146,10 @@ private fun SignUpText(onNavigateToSignUpScreen: () -> Unit) {
             annotation = "signup"
         )
         withStyle(
-            style = SpanStyle(color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold)
+            style = SpanStyle(
+                color = MaterialTheme.colorScheme.secondary,
+                fontWeight = FontWeight.Bold
+            )
         ) {
             append(stringResource(id = R.string.signup))
         }

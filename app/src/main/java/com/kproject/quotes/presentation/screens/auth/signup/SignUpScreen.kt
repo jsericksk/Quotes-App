@@ -71,7 +71,8 @@ fun SignUpScreen(
         title = stringResource(id = R.string.error),
         message = uiState.signUpErrorMessage.asString(),
         showButtonCancel = false,
-        onClickButtonOk = {}
+        cancelable = false,
+        onClickButtonOk = {},
     )
 }
 
