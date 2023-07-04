@@ -16,12 +16,9 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.*
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,11 +26,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kproject.quotes.R
+import com.kproject.quotes.commom.ResultState
 import com.kproject.quotes.presentation.screens.auth.components.AuthButton
 import com.kproject.quotes.presentation.screens.auth.components.FieldType
 import com.kproject.quotes.presentation.screens.auth.components.TextField
-import com.kproject.quotes.presentation.screens.auth.login.LoginScreen
+import com.kproject.quotes.presentation.screens.components.ProgressAlertDialog
+import com.kproject.quotes.presentation.screens.components.SimpleAlertDialog
 import com.kproject.quotes.presentation.theme.DefaultScreenPadding
 import com.kproject.quotes.presentation.theme.PreviewTheme
 
@@ -42,20 +42,48 @@ fun SignUpScreen(
     onNavigateToHomeScreen: () -> Unit,
     onNavigateBack: () -> Unit
 ) {
-    MainContent(onNavigateBack = onNavigateBack)
+    val signUpViewModel: SignUpViewModel = hiltViewModel()
+    val uiState = signUpViewModel.uiState
+    val signUpState = signUpViewModel.signUpState
+
+    MainContent(
+        uiState = uiState,
+        onUiEvent = signUpViewModel::onUiEvent,
+        onSignUpButtonClick = {
+            signUpViewModel.signUp()
+        },
+        onNavigateBack = onNavigateBack,
+    )
+
+    LaunchedEffect(signUpState) {
+        if (signUpState is ResultState.Success) {
+            onNavigateToHomeScreen.invoke()
+        }
+    }
+
+    ProgressAlertDialog(showDialog = uiState.isLoading)
+
+    SimpleAlertDialog(
+        showDialog = uiState.signUpError,
+        onDismiss = {
+            signUpViewModel.onUiEvent(SignUpUiEvent.OnDismissErrorDialog)
+        },
+        title = stringResource(id = R.string.error),
+        message = uiState.signUpErrorMessage.asString(),
+        showButtonCancel = false,
+        onClickButtonOk = {}
+    )
 }
 
 @Composable
 private fun MainContent(
     modifier: Modifier = Modifier,
-    onNavigateBack: () -> Unit
+    uiState: SignUpUiState,
+    onUiEvent: (SignUpUiEvent) -> Unit,
+    onSignUpButtonClick: () -> Unit,
+    onNavigateBack: () -> Unit,
 ) {
     val heightSpacing = 24.dp
-
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var username by remember { mutableStateOf("") }
-    var usernameErrorMessage by remember { mutableStateOf("") }
 
     Column(
         modifier = modifier
@@ -93,41 +121,63 @@ private fun MainContent(
                 fontSize = 38.sp,
                 fontWeight = FontWeight.ExtraBold
             )
+
             Spacer(Modifier.height(50.dp))
+
             TextField(
-                value = email,
-                onValueChange = { newValue -> email = newValue },
+                value = uiState.email,
+                onValueChange = { value ->
+                    onUiEvent.invoke(SignUpUiEvent.EmailChanged(value))
+                },
                 hint = stringResource(id = R.string.email),
                 leadingIcon = R.drawable.outline_email_24,
-                fieldType = FieldType.Email
+                fieldType = FieldType.Email,
+                errorMessage = uiState.emailError.asString()
             )
+
             Spacer(Modifier.height(heightSpacing))
+
             TextField(
-                value = password,
-                onValueChange = { newValue -> password = newValue },
+                value = uiState.password,
+                onValueChange = { value ->
+                    onUiEvent.invoke(SignUpUiEvent.PasswordChanged(value))
+                },
                 hint = stringResource(id = R.string.password),
                 leadingIcon = R.drawable.outline_key_24,
-                fieldType = FieldType.Password
+                fieldType = FieldType.Password,
+                errorMessage = uiState.passwordError.asString()
             )
+
             Spacer(Modifier.height(heightSpacing))
+
             TextField(
-                value = username,
-                onValueChange = { newValue ->
-                    username = newValue
-                    usernameErrorMessage = if (username.length < 3) {
-                        "Username too short"
-                    } else {
-                        ""
-                    }
+                value = uiState.repeatedPassword,
+                onValueChange = { value ->
+                    onUiEvent.invoke(SignUpUiEvent.RepeatedPasswordChanged(value))
+                },
+                hint = stringResource(id = R.string.repeated_password),
+                leadingIcon = R.drawable.outline_key_24,
+                fieldType = FieldType.Password,
+                errorMessage = uiState.repeatedPasswordError.asString()
+            )
+
+            Spacer(Modifier.height(heightSpacing))
+
+            TextField(
+                value = uiState.username,
+                onValueChange = { value ->
+                    onUiEvent.invoke(SignUpUiEvent.UsernameChanged(value))
                 },
                 hint = stringResource(id = R.string.username),
                 leadingIcon = R.drawable.outline_person_24,
-                errorMessage = usernameErrorMessage
+                errorMessage = uiState.usernameError.asString()
             )
+
             Spacer(Modifier.height(heightSpacing))
+
             AuthButton(
                 text = stringResource(id = R.string.signup),
-                onClick = {}
+                onClick = onSignUpButtonClick
             )
         }
     }
@@ -137,9 +187,11 @@ private fun MainContent(
 @Composable
 private fun Preview() {
     PreviewTheme {
-        SignUpScreen(
-            onNavigateToHomeScreen = {},
-            onNavigateBack = {}
+        MainContent(
+            uiState = SignUpUiState(),
+            onNavigateBack = {},
+            onUiEvent = {},
+            onSignUpButtonClick = {}
         )
     }
 }

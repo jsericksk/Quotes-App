@@ -14,6 +14,7 @@
     <string name="username">Username</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="repeated_password">Repeated password</string>
     <string name="confirm_password">Confirm password</string>
     <string name="error_empty_email">Email cannot be empty</string>
     <string name="error_email_badly_formatted">The email address is badly formatted</string>
