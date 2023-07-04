@@ -95,6 +95,9 @@ dependencies {
     // Splash Screen
     implementation "androidx.core:core-splashscreen:1.0.1"
 
+    // Paging3 Compose
+    implementation("androidx.paging:paging-compose:1.0.0-alpha20")
+
     // Tests
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
