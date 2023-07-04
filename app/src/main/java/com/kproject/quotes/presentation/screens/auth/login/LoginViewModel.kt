@@ -6,10 +6,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kproject.quotes.commom.ResultState
+import com.kproject.quotes.commom.constants.PrefsConstants
 import com.kproject.quotes.commom.exception.ValidationState
 import com.kproject.quotes.domain.usecase.auth.LoginUseCase
 import com.kproject.quotes.domain.usecase.auth.validation.ValidateEmailUseCase
 import com.kproject.quotes.domain.usecase.auth.validation.ValidatePasswordUseCase
+import com.kproject.quotes.domain.usecase.preference.GetPreferenceUseCase
+import com.kproject.quotes.domain.usecase.preference.SavePreferenceUseCase
+import com.kproject.quotes.domain.usecase.preference.SavePreferenceUseCaseImpl
 import com.kproject.quotes.presentation.screens.auth.utils.toAuthErrorMessage
 import com.kproject.quotes.presentation.screens.auth.utils.toErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +24,8 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val validateEmailUseCase: ValidateEmailUseCase,
-    private val validatePasswordUseCase: ValidatePasswordUseCase
+    private val validatePasswordUseCase: ValidatePasswordUseCase,
+    private val savePreferenceUseCase: SavePreferenceUseCase,
 ) : ViewModel() {
     var uiState by mutableStateOf(LoginUiState())
         private set
@@ -57,6 +62,10 @@ class LoginViewModel @Inject constructor(
                         }
                         is ResultState.Success -> {
                             uiState = uiState.copy(isLoading = false)
+                            savePreferenceUseCase(
+                                key = PrefsConstants.IsUserLoggedIn,
+                                value = true
+                            )
                             loginState = ResultState.Success()
                         }
                         is ResultState.Error -> {

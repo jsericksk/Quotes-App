@@ -14,22 +14,28 @@ import com.kproject.quotes.presentation.screens.home.HomeScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun NavigationGraph() {
+fun NavigationGraph(isUserLoggedIn: Boolean) {
     val navController = rememberAnimatedNavController()
 
     AnimatedNavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
         composable(route = Screen.LoginScreen.route) {
-            LoginScreen(
-                onNavigateToHomeScreen = {
-                    navController.navigateWithPopUp(
-                        toRoute = Screen.HomeScreen.route,
-                        fromRoute = Screen.LoginScreen.route
-                    )
-                },
-                onNavigateToSignUpScreen = {
-                    navController.navigate(Screen.SignUpScreen.route)
-                }
-            )
+            if (isUserLoggedIn) {
+                HomeScreen(
+                    onNavigateToLoginScreen = {}
+                )
+            } else {
+                LoginScreen(
+                    onNavigateToHomeScreen = {
+                        navController.navigateWithPopUp(
+                            toRoute = Screen.HomeScreen.route,
+                            fromRoute = Screen.LoginScreen.route
+                        )
+                    },
+                    onNavigateToSignUpScreen = {
+                        navController.navigate(Screen.SignUpScreen.route)
+                    }
+                )
+            }
         }
 
         // HomeScreen

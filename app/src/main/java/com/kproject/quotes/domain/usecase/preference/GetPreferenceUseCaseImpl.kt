@@ -1,8 +1,11 @@
 package com.kproject.quotes.domain.usecase.preference
 
 import com.kproject.quotes.domain.repository.PreferenceRepository
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GetPreferenceUseCaseImpl(
+@Singleton
+class GetPreferenceUseCaseImpl @Inject constructor(
     private val preferenceRepository: PreferenceRepository
 ) : GetPreferenceUseCase {
 
