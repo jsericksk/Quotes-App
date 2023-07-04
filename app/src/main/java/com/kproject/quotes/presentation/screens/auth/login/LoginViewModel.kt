@@ -61,12 +61,12 @@ class LoginViewModel @Inject constructor(
                             uiState = uiState.copy(isLoading = true)
                         }
                         is ResultState.Success -> {
+                            loginState = ResultState.Success()
                             uiState = uiState.copy(isLoading = false)
                             savePreferenceUseCase(
                                 key = PrefsConstants.IsUserLoggedIn,
                                 value = true
                             )
-                            loginState = ResultState.Success()
                         }
                         is ResultState.Error -> {
                             result.exception?.let { exception ->
