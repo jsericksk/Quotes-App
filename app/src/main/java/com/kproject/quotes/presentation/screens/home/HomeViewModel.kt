@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,5 +35,20 @@ class HomeViewModel @Inject constructor(
                     quoteModel.fromModel()
                 }
             }
+    }
+
+    fun getSearchedQuotes(): Flow<PagingData<Quote>> {
+        return quotesRepository.getAllQuotes(filter = _uiState.value.searchQuery)
+            .cachedIn(viewModelScope).map { pagingDataModel ->
+                pagingDataModel.map { quoteModel ->
+                    quoteModel.fromModel()
+                }
+            }
+    }
+
+    fun onSearchQueryChange(searchQuery: String) {
+        _uiState.update {
+            it.copy(searchQuery = searchQuery)
+        }
     }
 }

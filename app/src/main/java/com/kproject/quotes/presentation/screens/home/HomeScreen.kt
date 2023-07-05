@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
@@ -25,6 +26,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,7 +50,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.kproject.quotes.R
 import com.kproject.quotes.presentation.model.Quote
-import com.kproject.quotes.presentation.screens.components.CenterTopBar
+import com.kproject.quotes.presentation.screens.components.CustomSearchBar
 import com.kproject.quotes.presentation.screens.components.EmptyListInfo
 import com.kproject.quotes.presentation.screens.components.ProgressIndicator
 
@@ -57,10 +61,12 @@ fun HomeScreen(
     val homeViewModel: HomeViewModel = hiltViewModel()
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val quotes = homeViewModel.getQuotes().collectAsLazyPagingItems()
+    val searchedQuotes = homeViewModel.getSearchedQuotes().collectAsLazyPagingItems()
 
     MainContent(
         uiState = uiState,
         quotesList = quotes,
+        onSearchQueryChange = homeViewModel::onSearchQueryChange
     )
 }
 
@@ -68,27 +74,14 @@ fun HomeScreen(
 private fun MainContent(
     uiState: HomeUiState,
     quotesList: LazyPagingItems<Quote>,
+    onSearchQueryChange: (String) -> Unit,
 ) {
+    var showActionIcons by rememberSaveable { mutableStateOf(true) }
+
     Scaffold(
-        topBar = {
-            CenterTopBar(
-                title = stringResource(id = R.string.app_name),
-                actions = {
-                    IconButton(onClick = {}) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.outline_settings_24),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
-                }
-            )
-        },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {
-
-                },
+                onClick = {},
                 containerColor = MaterialTheme.colorScheme.secondary,
             ) {
                 Icon(
@@ -104,9 +97,42 @@ private fun MainContent(
                 .padding(paddingValues)
                 .fillMaxSize()
         ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth(),
+            ) {
+                CustomSearchBar(
+                    query = uiState.searchQuery,
+                    onQueryChange = onSearchQueryChange,
+                    onSearch = {},
+                    onActiveChange = { isActive ->
+                        showActionIcons = !isActive
+                    },
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .fillMaxWidth()
+                        .weight(1f)
+                )
+
+                if (showActionIcons) {
+                    Spacer(Modifier.width(6.dp))
+                    IconButton(onClick = {}) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.outline_person_24),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier
+                                .size(40.dp)
+                                .padding(4.dp)
+                        )
+                    }
+                }
+            }
+
             QuotesList(
                 uiState = uiState,
-                quotesList = quotesList,
+                quotes = quotesList,
             )
         }
     }
@@ -116,10 +142,10 @@ private fun MainContent(
 private fun QuotesList(
     modifier: Modifier = Modifier,
     uiState: HomeUiState,
-    quotesList: LazyPagingItems<Quote>,
+    quotes: LazyPagingItems<Quote>,
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        when (quotesList.loadState.refresh) {
+        when (quotes.loadState.refresh) {
             is LoadState.Loading -> {
                 item {
                     ProgressIndicator(
@@ -128,8 +154,8 @@ private fun QuotesList(
                 }
             }
             is LoadState.NotLoading -> {
-                items(count = quotesList.itemCount) { index ->
-                    val quote = quotesList[index]
+                items(count = quotes.itemCount) { index ->
+                    val quote = quotes[index]
                     quote?.let {
                         QuotesListItem(
                             quote = quote,
@@ -151,7 +177,7 @@ private fun QuotesList(
                         )
                         Spacer(Modifier.height(8.dp))
                         RetryButton(
-                            onClick = { quotesList.retry() },
+                            onClick = { quotes.retry() },
                             modifier = Modifier.padding(8.dp)
                         )
                     }
@@ -159,7 +185,7 @@ private fun QuotesList(
             }
         }
 
-        when (quotesList.loadState.append) {
+        when (quotes.loadState.append) {
             is LoadState.Loading -> {
                 item {
                     Column(
@@ -189,7 +215,7 @@ private fun QuotesList(
                         )
                         Spacer(Modifier.height(4.dp))
                         RetryButton(
-                            onClick = { quotesList.retry() },
+                            onClick = { quotes.retry() },
                             modifier = Modifier.padding(6.dp)
                         )
                     }
@@ -208,7 +234,7 @@ private fun QuotesListItem(
 ) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF01579B)
+            containerColor = Color(0xFF0F202E)
         ),
         shape = MaterialTheme.shapes.medium,
         modifier = modifier
@@ -290,7 +316,8 @@ private fun RetryButton(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.secondary
-        )
+        ),
+        modifier = modifier
     ) {
         Text(
             text = stringResource(id = R.string.try_again),

@@ -24,17 +24,18 @@
     <string name="error_username_empty">Username cannot be empty</string>
     <string name="error_invalid_username">Username must be a minimum of 3 characters and a maximum of 50</string>
     <string name="error_wrong_email_or_password">Wrong email or password.</string>
-    <string name="error_login">There was an error trying to loginModel.</string>
+    <string name="error_login">There was an error trying to login.</string>
     <string name="error_signup">There was an error trying to register.</string>
     <string name="error_email_not_available">Email not available.</string>
     <string name="error_username_not_available">Username not available.</string>
     <string name="error_when_trying_to_auto_login">Your account was created successfully, but there
-        was an error trying to auto-loginModel. Try logging in again at the loginModel screen.</string>
+        was an error trying to auto-login. Try logging in again at the login screen.</string>
 
     <!-- HomeScreen -->
     <string name="error_loading_quotes">Unknown error loading quotes</string>
     <string name="error_loading_more_quotes_from_pagination">Error loading more quotes</string>
     <string name="try_again">Try again</string>
+    <string name="search">Search</string>
 
 
 </resources>
