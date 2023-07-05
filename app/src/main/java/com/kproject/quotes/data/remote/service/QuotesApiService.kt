@@ -17,7 +17,8 @@ interface QuotesApiService {
     @GET("quotes")
     suspend fun getQuotes(
         @Query("page") page: Int?,
-        @Query("filter") filter: String? = null
+        @Query("filter") filter: String? = null,
+        @Query("userId") userId: Int?,
     ): Response<InfoResponse>
 
     @GET("quotes/{id}")
