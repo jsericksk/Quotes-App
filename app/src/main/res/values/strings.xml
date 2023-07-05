@@ -33,6 +33,8 @@
 
     <!-- HomeScreen -->
     <string name="error_loading_quotes">Unknown error loading quotes</string>
+    <string name="error_loading_more_quotes_from_pagination">Error loading more quotes</string>
+    <string name="try_again">Try again</string>
 
 
 </resources>

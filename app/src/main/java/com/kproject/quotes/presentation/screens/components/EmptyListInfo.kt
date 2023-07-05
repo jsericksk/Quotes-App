@@ -31,7 +31,6 @@ fun EmptyListInfo(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .fillMaxSize()
             .padding(8.dp),
     ) {
         Icon(

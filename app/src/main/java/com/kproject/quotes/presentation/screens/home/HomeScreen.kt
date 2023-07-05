@@ -10,15 +10,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyItemScope
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -47,14 +44,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemContentType
-import androidx.paging.compose.itemKey
-import androidx.paging.compose.items
 import com.kproject.quotes.R
 import com.kproject.quotes.presentation.model.Quote
-import com.kproject.quotes.presentation.model.fakeQuotesList
 import com.kproject.quotes.presentation.screens.components.CenterTopBar
-import kotlin.text.Typography.quote
+import com.kproject.quotes.presentation.screens.components.EmptyListInfo
+import com.kproject.quotes.presentation.screens.components.ProgressIndicator
 
 @Composable
 fun HomeScreen(
@@ -67,7 +61,6 @@ fun HomeScreen(
     MainContent(
         uiState = uiState,
         quotesList = quotes,
-        onNavigateToLoginScreen = {},
     )
 }
 
@@ -75,7 +68,6 @@ fun HomeScreen(
 private fun MainContent(
     uiState: HomeUiState,
     quotesList: LazyPagingItems<Quote>,
-    onNavigateToLoginScreen: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -114,7 +106,7 @@ private fun MainContent(
         ) {
             QuotesList(
                 uiState = uiState,
-                quotesList = quotesList
+                quotesList = quotesList,
             )
         }
     }
@@ -126,63 +118,80 @@ private fun QuotesList(
     uiState: HomeUiState,
     quotesList: LazyPagingItems<Quote>,
 ) {
-    LazyColumn {
-        items(
-            count = quotesList.itemCount,
-        ) { index ->
-            val item = quotesList[index]
-            item?.let { quote ->
-                QuotesListItem(
-                    quote = quote,
-                    onClick = {}
-                )
-            }
-        }
-
-        when (val state = quotesList.loadState.refresh) {
-            is LoadState.Error -> {
-                item {
-                    Text(text = "Error. ${state.error}", color = Color.Red)
-                }
-            }
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        when (quotesList.loadState.refresh) {
             is LoadState.Loading -> {
                 item {
-                    Column(
-                        modifier = Modifier
-                            .fillParentMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                    ) {
-                        Text(
-                            modifier = Modifier
-                                .padding(8.dp),
-                            text = "Refresh Loading"
+                    ProgressIndicator(
+                        modifier = Modifier.fillParentMaxSize()
+                    )
+                }
+            }
+            is LoadState.NotLoading -> {
+                items(count = quotesList.itemCount) { index ->
+                    val quote = quotesList[index]
+                    quote?.let {
+                        QuotesListItem(
+                            quote = quote,
+                            onClick = {}
                         )
-
-                        CircularProgressIndicator(color = Color.Black)
                     }
                 }
             }
-            else -> {}
-        }
-
-        when (val state = quotesList.loadState.append) {
             is LoadState.Error -> {
                 item {
-                    Text(text = "Error append. ${state.error}", color = Color.Red)
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.fillParentMaxSize()
+                    ) {
+                        EmptyListInfo(
+                            iconResId = R.drawable.outline_error_outline_24,
+                            title = stringResource(id = R.string.error_loading_quotes)
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        RetryButton(
+                            onClick = { quotesList.retry() },
+                            modifier = Modifier.padding(8.dp)
+                        )
+                    }
                 }
             }
+        }
+
+        when (quotesList.loadState.append) {
             is LoadState.Loading -> {
                 item {
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
-                        Text(text = "Pagination Loading")
-
-                        CircularProgressIndicator(color = Color.Black)
+                        CircularProgressIndicator(
+                            color = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.padding(10.dp)
+                        )
+                    }
+                }
+            }
+            is LoadState.Error -> {
+                item {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.error_loading_more_quotes_from_pagination),
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                        Spacer(Modifier.height(4.dp))
+                        RetryButton(
+                            onClick = { quotesList.retry() },
+                            modifier = Modifier.padding(6.dp)
+                        )
                     }
                 }
             }
@@ -269,6 +278,24 @@ private fun QuotesListItem(
                 QuoteCardActionButtons()
             }
         }
+    }
+}
+
+@Composable
+private fun RetryButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    Button(
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.secondary
+        )
+    ) {
+        Text(
+            text = stringResource(id = R.string.try_again),
+            color = MaterialTheme.colorScheme.onSurface
+        )
     }
 }
 
