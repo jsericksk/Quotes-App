@@ -46,7 +46,7 @@ fun CustomSearchBar(
             onActiveChange.invoke(false)
             onSearch.invoke(value)
         },
-        active = isActive,
+        active = false,
         onActiveChange = { active ->
             isActive = active
             onActiveChange.invoke(active)
@@ -104,7 +104,7 @@ fun CustomSearchBar(
             }
         },
         colors = SearchBarDefaults.colors(
-            containerColor = MaterialTheme.colorScheme.primary
+            containerColor = MaterialTheme.colorScheme.primary,
         ),
         modifier = modifier
     ) {
