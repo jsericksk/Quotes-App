@@ -44,7 +44,7 @@ private fun Preview() {
     PreviewTheme {
         Column {
             AuthButton(
-                text = "Login",
+                text = "LoginModel",
                 onClick = {}
             )
         }

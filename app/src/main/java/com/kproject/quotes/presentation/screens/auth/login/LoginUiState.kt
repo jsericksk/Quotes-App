@@ -1,6 +1,6 @@
 package com.kproject.quotes.presentation.screens.auth.login
 
-import com.kproject.quotes.domain.model.auth.Login
+import com.kproject.quotes.domain.model.auth.LoginModel
 import com.kproject.quotes.presentation.utils.UiText
 
 data class LoginUiState(
@@ -14,4 +14,4 @@ data class LoginUiState(
     val validateFieldsWhenTyping: Boolean = false
 )
 
-fun LoginUiState.toLoginModel() = Login(email, password)
+fun LoginUiState.toLoginModel() = LoginModel(email, password)

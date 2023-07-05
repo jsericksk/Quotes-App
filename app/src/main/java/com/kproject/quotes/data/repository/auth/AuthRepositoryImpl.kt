@@ -6,8 +6,8 @@ import com.kproject.quotes.commom.ResultState
 import com.kproject.quotes.commom.exception.AuthException
 import com.kproject.quotes.data.remote.model.ErrorResponse
 import com.kproject.quotes.data.remote.service.AuthApiService
-import com.kproject.quotes.domain.model.auth.Login
-import com.kproject.quotes.domain.model.auth.SignUp
+import com.kproject.quotes.domain.model.auth.LoginModel
+import com.kproject.quotes.domain.model.auth.SignUpModel
 import com.kproject.quotes.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -20,10 +20,10 @@ class AuthRepositoryImpl(
     private val authApiService: AuthApiService,
 ) : AuthRepository {
 
-    override suspend fun signUp(signUp: SignUp): Flow<ResultState<Unit>> = flow {
+    override suspend fun signUp(signUpModel: SignUpModel): Flow<ResultState<Unit>> = flow {
         emit(ResultState.Loading)
         try {
-            val response = authApiService.signUp(signUp)
+            val response = authApiService.signUp(signUpModel)
             if (response.isSuccessful) {
                 emit(ResultState.Success())
             } else {
@@ -51,10 +51,10 @@ class AuthRepositoryImpl(
         }
     }
 
-    override suspend fun login(login: Login): Flow<ResultState<Unit>> = flow {
+    override suspend fun login(loginModel: LoginModel): Flow<ResultState<Unit>> = flow {
         emit(ResultState.Loading)
         try {
-            val response = authApiService.login(login)
+            val response = authApiService.login(loginModel)
             if (response.isSuccessful) {
                 response.body()?.let { tokensResponse ->
                     tokenManagerRepository.accessToken = tokensResponse.accessToken

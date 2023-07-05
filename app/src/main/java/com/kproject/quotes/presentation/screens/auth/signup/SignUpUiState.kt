@@ -1,6 +1,6 @@
 package com.kproject.quotes.presentation.screens.auth.signup
 
-import com.kproject.quotes.domain.model.auth.SignUp
+import com.kproject.quotes.domain.model.auth.SignUpModel
 import com.kproject.quotes.presentation.utils.UiText
 
 data class SignUpUiState(
@@ -18,4 +18,4 @@ data class SignUpUiState(
     val validateFieldsWhenTyping: Boolean = false
 )
 
-fun SignUpUiState.toSignUpModel() = SignUp(email, username, password)
+fun SignUpUiState.toSignUpModel() = SignUpModel(email, username, password)

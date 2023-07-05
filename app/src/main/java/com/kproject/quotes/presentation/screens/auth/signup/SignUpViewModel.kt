@@ -9,7 +9,7 @@ import com.kproject.quotes.R
 import com.kproject.quotes.commom.ResultState
 import com.kproject.quotes.commom.constants.PrefsConstants
 import com.kproject.quotes.commom.exception.ValidationState
-import com.kproject.quotes.domain.model.auth.Login
+import com.kproject.quotes.domain.model.auth.LoginModel
 import com.kproject.quotes.domain.usecase.auth.LoginUseCase
 import com.kproject.quotes.domain.usecase.auth.SignUpUseCase
 import com.kproject.quotes.domain.usecase.auth.validation.ValidateEmailUseCase
@@ -96,8 +96,8 @@ class SignUpViewModel @Inject constructor(
 
     private fun autoLogin() {
         viewModelScope.launch {
-            val login = Login(uiState.email, uiState.password)
-            loginUseCase(login).collect { loginResult ->
+            val loginModel = LoginModel(uiState.email, uiState.password)
+            loginUseCase(loginModel).collect { loginResult ->
                 when (loginResult) {
                     is ResultState.Success -> {
                         uiState = uiState.copy(isLoading = false)
