@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
@@ -26,14 +25,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -53,6 +50,7 @@ import com.kproject.quotes.presentation.model.Quote
 import com.kproject.quotes.presentation.screens.components.CustomSearchBar
 import com.kproject.quotes.presentation.screens.components.EmptyListInfo
 import com.kproject.quotes.presentation.screens.components.ProgressIndicator
+import com.kproject.quotes.presentation.utils.Utils
 
 @Composable
 fun HomeScreen(
@@ -61,11 +59,10 @@ fun HomeScreen(
     val homeViewModel: HomeViewModel = hiltViewModel()
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val quotes = homeViewModel.getQuotes().collectAsLazyPagingItems()
-    val searchedQuotes = homeViewModel.getSearchedQuotes().collectAsLazyPagingItems()
 
     MainContent(
         uiState = uiState,
-        quotesList = quotes,
+        quotes = quotes,
         onSearchQueryChange = homeViewModel::onSearchQueryChange
     )
 }
@@ -73,7 +70,7 @@ fun HomeScreen(
 @Composable
 private fun MainContent(
     uiState: HomeUiState,
-    quotesList: LazyPagingItems<Quote>,
+    quotes: LazyPagingItems<Quote>,
     onSearchQueryChange: (String) -> Unit,
 ) {
     Scaffold(
@@ -117,7 +114,7 @@ private fun MainContent(
 
             QuotesList(
                 uiState = uiState,
-                quotes = quotesList,
+                quotes = quotes,
             )
         }
     }
@@ -286,7 +283,7 @@ private fun QuotesListItem(
                         .weight(1f)
                 )
 
-                QuoteCardActionButtons()
+                QuoteCardActionButtons(quote = quote)
             }
         }
     }
@@ -313,11 +310,16 @@ private fun RetryButton(
 
 @Composable
 private fun QuoteCardActionButtons(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    quote: Quote
 ) {
+    val context = LocalContext.current
+    val quoteAndAuthor = "${quote.quote} — ${quote.author}"
     Row(modifier = modifier) {
         IconButton(
-            onClick = {},
+            onClick = {
+                Utils.copyToClipBoard(context = context, text = quoteAndAuthor)
+            },
             colors = IconButtonDefaults.iconButtonColors(
                 containerColor = MaterialTheme.colorScheme.background
             )
@@ -330,7 +332,9 @@ private fun QuoteCardActionButtons(
         }
         Spacer(Modifier.width(6.dp))
         IconButton(
-            onClick = {},
+            onClick = {
+                Utils.shareText(context = context, text = quoteAndAuthor)
+            },
             colors = IconButtonDefaults.iconButtonColors(
                 containerColor = MaterialTheme.colorScheme.background
             )
