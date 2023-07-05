@@ -14,9 +14,9 @@ class QuotesRepositoryImpl(
     private val quotesApiService: QuotesApiService
 ) : QuotesRepository {
 
-    override suspend fun getAllQuotes(filter: String?): Flow<PagingData<QuoteModel>> {
+    override fun getAllQuotes(filter: String?): Flow<PagingData<QuoteModel>> {
         return Pager(
-            config = PagingConfig(pageSize = 15, prefetchDistance = 2),
+            config = PagingConfig(pageSize = 15),
             pagingSourceFactory = {
                 QuotesApiPagingSource(
                     quotesApiService = quotesApiService,
@@ -27,7 +27,7 @@ class QuotesRepositoryImpl(
         ).flow
     }
 
-    override suspend fun getQuotesFromUserId(
+    override fun getQuotesFromUserId(
         userId: Int,
         filter: String?
     ): Flow<PagingData<QuoteModel>> {

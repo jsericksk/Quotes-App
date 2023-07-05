@@ -1,6 +1,7 @@
 package com.kproject.quotes.presentation.screens.home
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,10 +10,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,25 +42,40 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
+import androidx.paging.compose.items
 import com.kproject.quotes.R
 import com.kproject.quotes.presentation.model.Quote
 import com.kproject.quotes.presentation.model.fakeQuotesList
 import com.kproject.quotes.presentation.screens.components.CenterTopBar
+import kotlin.text.Typography.quote
 
 @Composable
 fun HomeScreen(
     onNavigateToLoginScreen: () -> Unit,
 ) {
+    val homeViewModel: HomeViewModel = hiltViewModel()
+    val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
+    val quotes = homeViewModel.getQuotes().collectAsLazyPagingItems()
+
     MainContent(
-        quotesList = fakeQuotesList,
+        uiState = uiState,
+        quotesList = quotes,
         onNavigateToLoginScreen = {},
     )
 }
 
 @Composable
 private fun MainContent(
+    uiState: HomeUiState,
+    quotesList: LazyPagingItems<Quote>,
     onNavigateToLoginScreen: () -> Unit,
-    quotesList: List<Quote>,
 ) {
     Scaffold(
         topBar = {
@@ -91,6 +113,7 @@ private fun MainContent(
                 .fillMaxSize()
         ) {
             QuotesList(
+                uiState = uiState,
                 quotesList = quotesList
             )
         }
@@ -100,16 +123,107 @@ private fun MainContent(
 @Composable
 private fun QuotesList(
     modifier: Modifier = Modifier,
-    quotesList: List<Quote>,
+    uiState: HomeUiState,
+    quotesList: LazyPagingItems<Quote>,
 ) {
-    LazyColumn(
+    /**LazyColumn(
         modifier = modifier.fillMaxSize()
     ) {
-        itemsIndexed(quotesList) { index, quote ->
-            QuotesListItem(
-                quote = quote,
-                onClick = {}
-            )
+        if (quotesList.loadState.refresh == LoadState.Loading) {
+            item {
+                Text(
+                    text = "Waiting for items to load from the backend",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentWidth(Alignment.CenterHorizontally)
+                )
+            }
+        }
+
+        items(count = quotesList.itemCount) { index ->
+            quotesList[index]?.let { quote ->
+                QuotesListItem(
+                    quote = quote,
+                    onClick = {}
+                )
+            }
+        }
+
+        if (quotesList.loadState.append == LoadState.Loading) {
+            item {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentWidth(Alignment.CenterHorizontally)
+                )
+            }
+        }
+    }*/
+
+
+    LazyColumn {
+        items(
+            count = quotesList.itemCount,
+        ) { index ->
+            val item = quotesList[index]
+            item?.let {
+                QuotesListItem(
+                    quote = item,
+                    onClick = {}
+                )
+            }
+
+            Divider()
+        }
+
+        when (val state = quotesList.loadState.refresh) {
+            is LoadState.Error -> {
+                item {
+                    Text(text = "Error. ${state.error}", color = Color.Red)
+                }
+            }
+            is LoadState.Loading -> { // Loading UI
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillParentMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .padding(8.dp),
+                            text = "Refresh Loading"
+                        )
+
+                        CircularProgressIndicator(color = Color.Black)
+                    }
+                }
+            }
+            else -> {}
+        }
+
+        when (val state = quotesList.loadState.append) {
+            is LoadState.Error -> {
+                item {
+                    Text(text = "Error append. ${state.error}", color = Color.Red)
+                }
+            }
+            is LoadState.Loading -> {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                    ) {
+                        Text(text = "Pagination Loading")
+
+                        CircularProgressIndicator(color = Color.Black)
+                    }
+                }
+            }
+            else -> {}
         }
     }
 }
@@ -183,7 +297,11 @@ private fun QuotesListItem(
                     )
                 }
 
-                Spacer(Modifier.fillMaxWidth().weight(1f))
+                Spacer(
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                )
 
                 QuoteCardActionButtons()
             }

@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface QuotesRepository {
 
-    suspend fun getAllQuotes(filter: String?): Flow<PagingData<QuoteModel>>
+    fun getAllQuotes(filter: String?): Flow<PagingData<QuoteModel>>
 
-    suspend fun getQuotesFromUserId(
+    fun getQuotesFromUserId(
         userId: Int,
         filter: String?
     ): Flow<PagingData<QuoteModel>>
