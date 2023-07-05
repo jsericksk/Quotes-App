@@ -31,5 +31,8 @@
     <string name="error_when_trying_to_auto_login">Your account was created successfully, but there
         was an error trying to auto-login. Try logging in again at the login screen.</string>
 
+    <!-- HomeScreen -->
+    <string name="error_loading_quotes">Unknown error loading quotes</string>
+
 
 </resources>
