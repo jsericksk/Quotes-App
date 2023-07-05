@@ -7,10 +7,12 @@ import com.kproject.quotes.data.remote.service.ApiConstants
 import com.kproject.quotes.data.remote.service.AuthApiService
 import com.kproject.quotes.data.remote.service.QuotesApiService
 import com.kproject.quotes.data.repository.PreferenceRepositoryImpl
+import com.kproject.quotes.data.repository.QuotesRepositoryImpl
 import com.kproject.quotes.data.repository.auth.AuthRepositoryImpl
 import com.kproject.quotes.data.repository.auth.TokenManagerRepository
 import com.kproject.quotes.domain.repository.AuthRepository
 import com.kproject.quotes.domain.repository.PreferenceRepository
+import com.kproject.quotes.domain.repository.QuotesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,6 +29,16 @@ class DataModule {
 
     @Provides
     @Singleton
+    fun provideAuthApiService(): AuthApiService {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(ApiConstants.BaseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        return retrofit.create(AuthApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
     fun provideCustomOkHttpClient(tokenManagerRepository: TokenManagerRepository): OkHttpClient {
         val authInterceptor = AuthInterceptor(tokenManagerRepository)
         val authAuthenticator = AuthAuthenticator(tokenManagerRepository)
@@ -34,16 +46,6 @@ class DataModule {
             .addInterceptor(authInterceptor)
             .authenticator(authAuthenticator)
             .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideAuthApiService(): AuthApiService {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(ApiConstants.BaseUrl)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        return retrofit.create(AuthApiService::class.java)
     }
 
     @Provides
@@ -72,6 +74,12 @@ class DataModule {
         authApiService: AuthApiService
     ): AuthRepository {
         return AuthRepositoryImpl(tokenManagerRepository, authApiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideQuotesRepository(quotesApiService: QuotesApiService): QuotesRepository {
+        return QuotesRepositoryImpl(quotesApiService)
     }
 
     @Provides
