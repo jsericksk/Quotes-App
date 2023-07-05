@@ -7,12 +7,12 @@ import kotlinx.coroutines.flow.Flow
 
 interface QuotesRepository {
 
-    suspend fun getAllQuotes(filter: String?): Flow<ResultState<PagingData<QuoteModel>>>
+    suspend fun getAllQuotes(filter: String?): Flow<PagingData<QuoteModel>>
 
     suspend fun getQuotesFromUserId(
         userId: Int,
         filter: String?
-    ): Flow<ResultState<PagingData<QuoteModel>>>
+    ): Flow<PagingData<QuoteModel>>
 
     suspend fun getById(id: Int): Flow<ResultState<QuoteModel>>
 
