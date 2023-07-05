@@ -76,8 +76,6 @@ private fun MainContent(
     quotesList: LazyPagingItems<Quote>,
     onSearchQueryChange: (String) -> Unit,
 ) {
-    var showActionIcons by rememberSaveable { mutableStateOf(true) }
-
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -97,38 +95,25 @@ private fun MainContent(
                 .padding(paddingValues)
                 .fillMaxSize()
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth(),
-            ) {
-                CustomSearchBar(
-                    query = uiState.searchQuery,
-                    onQueryChange = onSearchQueryChange,
-                    onSearch = {},
-                    onActiveChange = { isActive ->
-                        showActionIcons = !isActive
-                    },
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .fillMaxWidth()
-                        .weight(1f)
-                )
-
-                if (showActionIcons) {
-                    Spacer(Modifier.width(6.dp))
+            CustomSearchBar(
+                query = uiState.searchQuery,
+                onQueryChange = onSearchQueryChange,
+                onSearch = {},
+                trailingIcon = {
                     IconButton(onClick = {}) {
                         Icon(
                             painter = painterResource(id = R.drawable.outline_person_24),
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier
-                                .size(40.dp)
-                                .padding(4.dp)
+                                .padding(6.dp)
                         )
                     }
-                }
-            }
+                },
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxWidth()
+            )
 
             QuotesList(
                 uiState = uiState,
