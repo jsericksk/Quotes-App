@@ -1,5 +1,6 @@
 package com.kproject.quotes.presentation.model
 
+import com.kproject.quotes.domain.model.quotes.QuoteModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -26,3 +27,5 @@ val fakeQuotesList = (0..20).map { index ->
     )
 }
 
+fun QuoteModel.fromModel() =
+        Quote(id, quote, author, postedByUsername, postedByUserId, publicationDate)
