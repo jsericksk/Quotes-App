@@ -26,8 +26,10 @@ class QuotesApiPagingSource(
                     val quotesModel = infoResponse.results.map { quoteResponse ->
                         quoteResponse.toQuoteModel()
                     }
-                    val uri = Uri.parse(infoResponse.info.next)
-                    val nextPage = uri.getQueryParameter("page")?.toInt()
+                    val nextPage = infoResponse.info.next?.let {
+                        val uri = Uri.parse(it)
+                        uri.getQueryParameter("page")?.toInt()
+                    }
                     return LoadResult.Page(
                         data = quotesModel,
                         prevKey = if (page == 1) null else page.minus(1),
@@ -35,7 +37,7 @@ class QuotesApiPagingSource(
                     )
                 }
             }
-            return LoadResult.Error(Exception("Unknown error load quotes"))
+            return LoadResult.Error(Exception("Unknown error loading quotes"))
         } catch (e: Exception) {
             LoadResult.Error(e)
         }

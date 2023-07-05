@@ -126,54 +126,17 @@ private fun QuotesList(
     uiState: HomeUiState,
     quotesList: LazyPagingItems<Quote>,
 ) {
-    /**LazyColumn(
-        modifier = modifier.fillMaxSize()
-    ) {
-        if (quotesList.loadState.refresh == LoadState.Loading) {
-            item {
-                Text(
-                    text = "Waiting for items to load from the backend",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                )
-            }
-        }
-
-        items(count = quotesList.itemCount) { index ->
-            quotesList[index]?.let { quote ->
-                QuotesListItem(
-                    quote = quote,
-                    onClick = {}
-                )
-            }
-        }
-
-        if (quotesList.loadState.append == LoadState.Loading) {
-            item {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                )
-            }
-        }
-    }*/
-
-
     LazyColumn {
         items(
             count = quotesList.itemCount,
         ) { index ->
             val item = quotesList[index]
-            item?.let {
+            item?.let { quote ->
                 QuotesListItem(
-                    quote = item,
+                    quote = quote,
                     onClick = {}
                 )
             }
-
-            Divider()
         }
 
         when (val state = quotesList.loadState.refresh) {
@@ -182,7 +145,7 @@ private fun QuotesList(
                     Text(text = "Error. ${state.error}", color = Color.Red)
                 }
             }
-            is LoadState.Loading -> { // Loading UI
+            is LoadState.Loading -> {
                 item {
                     Column(
                         modifier = Modifier

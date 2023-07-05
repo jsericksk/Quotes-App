@@ -16,7 +16,7 @@ class QuotesRepositoryImpl(
 
     override fun getAllQuotes(filter: String?): Flow<PagingData<QuoteModel>> {
         return Pager(
-            config = PagingConfig(pageSize = 15),
+            config = PagingConfig(pageSize = 15, prefetchDistance = 1),
             pagingSourceFactory = {
                 QuotesApiPagingSource(
                     quotesApiService = quotesApiService,
