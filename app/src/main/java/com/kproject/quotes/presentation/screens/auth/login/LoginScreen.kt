@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kproject.quotes.R
-import com.kproject.quotes.commom.ResultState
 import com.kproject.quotes.presentation.screens.auth.components.AuthButton
 import com.kproject.quotes.presentation.screens.auth.components.FieldType
 import com.kproject.quotes.presentation.screens.auth.components.TextField
@@ -40,7 +39,13 @@ fun LoginScreen(
 ) {
     val loginViewModel: LoginViewModel = hiltViewModel()
     val uiState = loginViewModel.uiState
-    val loginState = loginViewModel.loginState
+    val isUserLoggedIn = uiState.isUserLoggedIn
+
+    LaunchedEffect(isUserLoggedIn) {
+        if (isUserLoggedIn) {
+            onNavigateToHomeScreen.invoke()
+        }
+    }
 
     MainContent(
         onNavigateToSignUpScreen = onNavigateToSignUpScreen,
@@ -50,12 +55,6 @@ fun LoginScreen(
             loginViewModel.login()
         }
     )
-
-    LaunchedEffect(loginState) {
-        if (loginState is ResultState.Success) {
-            onNavigateToHomeScreen.invoke()
-        }
-    }
 
     ProgressAlertDialog(showDialog = uiState.isLoading)
 

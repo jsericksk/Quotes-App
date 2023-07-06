@@ -6,10 +6,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kproject.quotes.commom.ResultState
+import com.kproject.quotes.commom.constants.PrefsConstants
 import com.kproject.quotes.commom.exception.ValidationState
 import com.kproject.quotes.domain.usecase.auth.LoginUseCase
 import com.kproject.quotes.domain.usecase.auth.validation.ValidateEmailUseCase
 import com.kproject.quotes.domain.usecase.auth.validation.ValidatePasswordUseCase
+import com.kproject.quotes.domain.usecase.preference.GetPreferenceUseCase
 import com.kproject.quotes.presentation.utils.toAuthErrorMessage
 import com.kproject.quotes.presentation.utils.toErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,12 +23,25 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePasswordUseCase: ValidatePasswordUseCase,
+    private val getPreferenceUseCase: GetPreferenceUseCase,
 ) : ViewModel() {
     var uiState by mutableStateOf(LoginUiState())
         private set
 
     var loginState: ResultState<Unit>? by mutableStateOf(null)
         private set
+
+    init {
+        isUserLoggedIn()
+    }
+
+    private fun isUserLoggedIn() {
+        val isUserLoggedIn = getPreferenceUseCase(
+            key = PrefsConstants.IsUserLoggedIn,
+            defaultValue = false
+        )
+        uiState = uiState.copy(isUserLoggedIn = isUserLoggedIn)
+    }
 
     fun onUiEvent(event: LoginUiEvent) {
         when (event) {
@@ -57,7 +72,7 @@ class LoginViewModel @Inject constructor(
                         }
                         is ResultState.Success -> {
                             loginState = ResultState.Success()
-                            uiState = uiState.copy(isLoading = false)
+                            uiState = uiState.copy(isLoading = false, isUserLoggedIn = true)
                         }
                         is ResultState.Error -> {
                             result.exception?.let { exception ->

@@ -15,62 +15,20 @@ import com.kproject.quotes.presentation.screens.userprofile.UserProfileScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun NavigationGraph(isUserLoggedIn: Boolean) {
+fun NavigationGraph() {
     val navController = rememberAnimatedNavController()
 
     AnimatedNavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
         composable(route = Screen.LoginScreen.route) {
-            if (isUserLoggedIn) {
-                HomeScreen(
-                    onNavigateToUserProfileScreen = {
-                        navController.navigate(Screen.UserProfileScreen.route)
-                    },
-                    onNavigateToLoginScreen = {
-                        navController.navigateWithPopUp(
-                            toRoute = Screen.LoginScreen.route,
-                            fromRoute = Screen.HomeScreen.route
-                        )
-                    },
-                )
-            } else {
-                LoginScreen(
-                    onNavigateToHomeScreen = {
-                        navController.navigateWithPopUp(
-                            toRoute = Screen.HomeScreen.route,
-                            fromRoute = Screen.LoginScreen.route
-                        )
-                    },
-                    onNavigateToSignUpScreen = {
-                        navController.navigate(Screen.SignUpScreen.route)
-                    }
-                )
-            }
-        }
-
-        // HomeScreen
-        composable(
-            route = Screen.HomeScreen.route,
-        ) {
-            HomeScreen(
-                onNavigateToUserProfileScreen = {
-                    navController.navigate(Screen.UserProfileScreen.route)
-                },
-                onNavigateToLoginScreen = {
+            LoginScreen(
+                onNavigateToHomeScreen = {
                     navController.navigateWithPopUp(
-                        toRoute = Screen.LoginScreen.route,
-                        fromRoute = Screen.HomeScreen.route
+                        toRoute = Screen.HomeScreen.route,
+                        fromRoute = Screen.LoginScreen.route
                     )
                 },
-            )
-        }
-
-        // UserProfileScreen
-        composable(
-            route = Screen.UserProfileScreen.route,
-        ) {
-            UserProfileScreen(
-                onNavigateBack = {
-                    navController.popBackStack()
+                onNavigateToSignUpScreen = {
+                    navController.navigate(Screen.SignUpScreen.route)
                 }
             )
         }
@@ -98,6 +56,34 @@ fun NavigationGraph(isUserLoggedIn: Boolean) {
                         fromRoute = Screen.SignUpScreen.route
                     )
                 },
+                onNavigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        // HomeScreen
+        composable(
+            route = Screen.HomeScreen.route,
+        ) {
+            HomeScreen(
+                onNavigateToUserProfileScreen = {
+                    navController.navigate(Screen.UserProfileScreen.route)
+                },
+                onNavigateToLoginScreen = {
+                    navController.navigateWithPopUp(
+                        toRoute = Screen.LoginScreen.route,
+                        fromRoute = Screen.HomeScreen.route
+                    )
+                },
+            )
+        }
+
+        // UserProfileScreen
+        composable(
+            route = Screen.UserProfileScreen.route,
+        ) {
+            UserProfileScreen(
                 onNavigateBack = {
                     navController.popBackStack()
                 }

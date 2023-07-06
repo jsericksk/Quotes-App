@@ -11,7 +11,8 @@ data class LoginUiState(
     val isLoading: Boolean = false,
     val loginError: Boolean = false,
     val loginErrorMessage: UiText = UiText.HardcodedString(""),
-    val validateFieldsWhenTyping: Boolean = false
+    val validateFieldsWhenTyping: Boolean = false,
+    val isUserLoggedIn: Boolean = false
 )
 
 fun LoginUiState.toLoginModel() = LoginModel(email, password)
