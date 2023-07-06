@@ -1,6 +1,5 @@
 package com.kproject.quotes.data.repository.auth
 
-import android.util.Log
 import com.auth0.android.jwt.JWT
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -17,7 +16,6 @@ import com.kproject.quotes.domain.repository.AuthRepository
 import com.kproject.quotes.domain.repository.PreferenceRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-
 
 const val EmailNotAvailableCode = "email_not_available"
 const val UsernameNotAvailableCode = "username_not_available"
@@ -75,11 +73,9 @@ class AuthRepositoryImpl(
                     emit(ResultState.Error(AuthException.WrongEmailOrPasswordException))
                     return@flow
                 }
-                Log.d("Repository", "Erro: ${response.errorBody()}")
                 emit(ResultState.Error(AuthException.UnknownLoginException))
             }
         } catch (e: Exception) {
-            Log.d("Repository", "Erro: ${e.printStackTrace()}")
             emit(ResultState.Error(AuthException.UnknownLoginException))
         }
     }

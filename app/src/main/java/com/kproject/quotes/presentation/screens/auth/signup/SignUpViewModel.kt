@@ -28,7 +28,6 @@ import javax.inject.Inject
 class SignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase,
     private val loginUseCase: LoginUseCase,
-    private val savePreferenceUseCase: SavePreferenceUseCase,
     private val validateUsernameUseCase: ValidateUsernameUseCase,
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePasswordUseCase: ValidatePasswordUseCase,
@@ -104,10 +103,6 @@ class SignUpViewModel @Inject constructor(
                     is ResultState.Success -> {
                         uiState = uiState.copy(isLoading = false)
                         signUpState = ResultState.Success()
-                        savePreferenceUseCase(
-                            key = PrefsConstants.IsUserLoggedIn,
-                            value = true
-                        )
                     }
                     is ResultState.Error -> {
                         uiState = uiState.copy(

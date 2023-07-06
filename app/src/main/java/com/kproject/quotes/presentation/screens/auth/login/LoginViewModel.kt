@@ -25,7 +25,6 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePasswordUseCase: ValidatePasswordUseCase,
-    private val savePreferenceUseCase: SavePreferenceUseCase,
 ) : ViewModel() {
     var uiState by mutableStateOf(LoginUiState())
         private set
@@ -63,10 +62,6 @@ class LoginViewModel @Inject constructor(
                         is ResultState.Success -> {
                             loginState = ResultState.Success()
                             uiState = uiState.copy(isLoading = false)
-                            savePreferenceUseCase(
-                                key = PrefsConstants.IsUserLoggedIn,
-                                value = true
-                            )
                         }
                         is ResultState.Error -> {
                             result.exception?.let { exception ->
