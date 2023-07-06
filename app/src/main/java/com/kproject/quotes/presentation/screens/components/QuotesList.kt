@@ -71,7 +71,7 @@ fun QuotesList(
             }
             is LoadState.Error -> {
                 item {
-                    val errorMessage = remember {
+                    val errorMessage = remember(state.error) {
                         (state.error as QuoteException).toQuoteErrorMessage()
                     }
                     Column(
