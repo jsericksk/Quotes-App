@@ -1,4 +1,4 @@
-package com.kproject.quotes.data.remote
+package com.kproject.quotes.data.remote.paging
 
 import android.net.Uri
 import androidx.paging.PagingSource

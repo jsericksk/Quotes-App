@@ -4,7 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.kproject.quotes.commom.ResultState
-import com.kproject.quotes.data.remote.QuotesApiPagingSource
+import com.kproject.quotes.data.remote.paging.QuotesApiPagingSource
 import com.kproject.quotes.data.remote.service.QuotesApiService
 import com.kproject.quotes.domain.model.quotes.QuoteModel
 import com.kproject.quotes.domain.repository.QuotesRepository

@@ -7,4 +7,5 @@ data class HomeUiState(
     val searchQuery: String = "",
     val quotes: PagingData<Quote> = PagingData.empty(),
     val searchedQuotes: PagingData<Quote> = PagingData.empty(),
+    val loggedInUsername: String = ""
 )
