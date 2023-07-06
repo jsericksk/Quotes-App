@@ -37,6 +37,9 @@ class QuotesApiPagingSource(
                     )
                 }
             }
+
+            // TODO: Adicionar verificação de frases não encontradas para certos usuários
+
             return LoadResult.Error(Exception("Unknown error loading quotes"))
         } catch (e: Exception) {
             LoadResult.Error(e)

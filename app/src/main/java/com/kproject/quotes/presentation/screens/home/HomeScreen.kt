@@ -55,6 +55,7 @@ import com.kproject.quotes.presentation.utils.Utils
 @Composable
 fun HomeScreen(
     onNavigateToLoginScreen: () -> Unit,
+    onNavigateToUserProfileScreen: () -> Unit,
 ) {
     val homeViewModel: HomeViewModel = hiltViewModel()
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
@@ -63,7 +64,8 @@ fun HomeScreen(
     MainContent(
         uiState = uiState,
         quotes = quotes,
-        onSearchQueryChange = homeViewModel::onSearchQueryChange
+        onSearchQueryChange = homeViewModel::onSearchQueryChange,
+        onNavigateToUserProfileScreen = onNavigateToUserProfileScreen
     )
 }
 
@@ -72,6 +74,7 @@ private fun MainContent(
     uiState: HomeUiState,
     quotes: LazyPagingItems<Quote>,
     onSearchQueryChange: (String) -> Unit,
+    onNavigateToUserProfileScreen: () -> Unit,
 ) {
     Scaffold(
         floatingActionButton = {
@@ -97,7 +100,7 @@ private fun MainContent(
                 onQueryChange = onSearchQueryChange,
                 onSearch = {},
                 trailingIcon = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = onNavigateToUserProfileScreen) {
                         Icon(
                             painter = painterResource(id = R.drawable.outline_person_24),
                             contentDescription = null,

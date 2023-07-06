@@ -22,7 +22,10 @@ fun NavigationGraph(isUserLoggedIn: Boolean) {
         composable(route = Screen.LoginScreen.route) {
             if (isUserLoggedIn) {
                 HomeScreen(
-                    onNavigateToLoginScreen = {}
+                    onNavigateToUserProfileScreen = {
+                        navController.navigate(Screen.UserProfileScreen.route)
+                    },
+                    onNavigateToLoginScreen = {},
                 )
             } else {
                 LoginScreen(
@@ -44,7 +47,10 @@ fun NavigationGraph(isUserLoggedIn: Boolean) {
             route = Screen.HomeScreen.route,
         ) {
             HomeScreen(
-                onNavigateToLoginScreen = {}
+                onNavigateToUserProfileScreen = {
+                    navController.navigate(Screen.UserProfileScreen.route)
+                },
+                onNavigateToLoginScreen = {},
             )
         }
 

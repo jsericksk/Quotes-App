@@ -31,7 +31,16 @@ class QuotesRepositoryImpl(
         userId: Int,
         filter: String?
     ): Flow<PagingData<QuoteModel>> {
-        TODO("Not yet implemented")
+        return Pager(
+            config = PagingConfig(pageSize = 15, prefetchDistance = 1),
+            pagingSourceFactory = {
+                QuotesApiPagingSource(
+                    quotesApiService = quotesApiService,
+                    userId = userId,
+                    filter = filter,
+                )
+            }
+        ).flow
     }
 
     override suspend fun getById(id: Int): Flow<ResultState<QuoteModel>> {
