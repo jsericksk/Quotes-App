@@ -28,9 +28,6 @@ class LoginViewModel @Inject constructor(
     var uiState by mutableStateOf(LoginUiState())
         private set
 
-    var loginState: ResultState<Unit>? by mutableStateOf(null)
-        private set
-
     init {
         isUserLoggedIn()
     }
@@ -71,7 +68,6 @@ class LoginViewModel @Inject constructor(
                             uiState = uiState.copy(isLoading = true)
                         }
                         is ResultState.Success -> {
-                            loginState = ResultState.Success()
                             uiState = uiState.copy(isLoading = false, isUserLoggedIn = true)
                         }
                         is ResultState.Error -> {

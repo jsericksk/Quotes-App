@@ -31,7 +31,7 @@
     <string name="error_when_trying_to_auto_login">Your account was created successfully, but there
         was an error trying to auto-login. Try logging in again at the login screen.</string>
 
-    <!-- HomeScreen -->
+    <!-- HomeScreen and UserProfileScreen -->
     <string name="error_loading_quotes">Unknown error loading quotes</string>
     <string name="error_loading_more_quotes_from_pagination">Error loading more quotes</string>
     <string name="try_again">Try again</string>
@@ -40,6 +40,13 @@
     <string name="view_my_quotes">My quotes</string>
     <string name="logout">Logout</string>
     <string name="logout_confirmation">Are you sure you want to logout?</string>
+
+    <string name="edit_quote">Edit</string>
+    <string name="delete_quote">Delete</string>
+    <string name="delete_quote_confirmation">Are you sure you want to delete quote?</string>
+
+    <string name="quote_text">Quote</string>
+    <string name="quote_author">Author</string>
 
 
 </resources>

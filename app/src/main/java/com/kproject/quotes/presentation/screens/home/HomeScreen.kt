@@ -116,6 +116,7 @@ private fun MainContent(
 
             QuotesList(
                 quotes = quotes,
+                showActionOptions = false
             )
         }
 

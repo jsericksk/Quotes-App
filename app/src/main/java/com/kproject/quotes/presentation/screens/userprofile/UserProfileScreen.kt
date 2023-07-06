@@ -17,5 +17,12 @@ fun UserProfileScreen(
 
     QuotesList(
         quotes = quotes,
+        showActionOptions = true,
+        onDeleteQuote = {
+
+        },
+        onEditQuote = {
+
+        }
     )
 }
