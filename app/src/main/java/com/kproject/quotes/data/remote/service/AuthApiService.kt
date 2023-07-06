@@ -14,7 +14,7 @@ interface AuthApiService {
     @POST("auth/register")
     suspend fun signUp(@Body signUpModel: SignUpModel): Response<Int>
 
-    @POST("auth/loginModel")
+    @POST("auth/login")
     suspend fun login(@Body loginModel: LoginModel): Response<TokensResponse>
 
     @POST("auth/refresh-token")

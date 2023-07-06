@@ -71,9 +71,10 @@ class DataModule {
     @Singleton
     fun provideAuthRepository(
         tokenManagerRepository: TokenManagerRepository,
-        authApiService: AuthApiService
+        authApiService: AuthApiService,
+        preferenceRepository: PreferenceRepository
     ): AuthRepository {
-        return AuthRepositoryImpl(tokenManagerRepository, authApiService)
+        return AuthRepositoryImpl(tokenManagerRepository, authApiService, preferenceRepository)
     }
 
     @Provides

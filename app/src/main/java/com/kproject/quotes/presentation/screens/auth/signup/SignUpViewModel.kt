@@ -61,6 +61,7 @@ class SignUpViewModel @Inject constructor(
             is SignUpUiEvent.OnDismissErrorDialog -> {
                 uiState = uiState.copy(signUpError = false)
             }
+            else -> {}
         }
     }
 
@@ -88,6 +89,7 @@ class SignUpViewModel @Inject constructor(
                                 )
                             }
                         }
+                        else -> {}
                     }
                 }
             }
