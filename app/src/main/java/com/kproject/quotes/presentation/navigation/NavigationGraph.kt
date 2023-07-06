@@ -11,6 +11,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.kproject.quotes.presentation.screens.auth.login.LoginScreen
 import com.kproject.quotes.presentation.screens.auth.signup.SignUpScreen
 import com.kproject.quotes.presentation.screens.home.HomeScreen
+import com.kproject.quotes.presentation.screens.userprofile.UserProfileScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -44,6 +45,17 @@ fun NavigationGraph(isUserLoggedIn: Boolean) {
         ) {
             HomeScreen(
                 onNavigateToLoginScreen = {}
+            )
+        }
+
+        // UserProfileScreen
+        composable(
+            route = Screen.UserProfileScreen.route,
+        ) {
+            UserProfileScreen(
+                onNavigateBack = {
+                    navController.popBackStack()
+                }
             )
         }
 
