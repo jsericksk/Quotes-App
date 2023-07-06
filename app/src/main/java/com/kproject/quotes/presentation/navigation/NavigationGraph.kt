@@ -25,7 +25,12 @@ fun NavigationGraph(isUserLoggedIn: Boolean) {
                     onNavigateToUserProfileScreen = {
                         navController.navigate(Screen.UserProfileScreen.route)
                     },
-                    onNavigateToLoginScreen = {},
+                    onNavigateToLoginScreen = {
+                        navController.navigateWithPopUp(
+                            toRoute = Screen.LoginScreen.route,
+                            fromRoute = Screen.HomeScreen.route
+                        )
+                    },
                 )
             } else {
                 LoginScreen(
@@ -50,7 +55,12 @@ fun NavigationGraph(isUserLoggedIn: Boolean) {
                 onNavigateToUserProfileScreen = {
                     navController.navigate(Screen.UserProfileScreen.route)
                 },
-                onNavigateToLoginScreen = {},
+                onNavigateToLoginScreen = {
+                    navController.navigateWithPopUp(
+                        toRoute = Screen.LoginScreen.route,
+                        fromRoute = Screen.HomeScreen.route
+                    )
+                },
             )
         }
 
