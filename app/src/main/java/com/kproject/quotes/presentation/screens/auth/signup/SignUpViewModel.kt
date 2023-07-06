@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kproject.quotes.R
 import com.kproject.quotes.commom.ResultState
-import com.kproject.quotes.commom.constants.PrefsConstants
 import com.kproject.quotes.commom.exception.ValidationState
 import com.kproject.quotes.domain.model.auth.LoginModel
 import com.kproject.quotes.domain.usecase.auth.LoginUseCase
@@ -16,9 +15,8 @@ import com.kproject.quotes.domain.usecase.auth.validation.ValidateEmailUseCase
 import com.kproject.quotes.domain.usecase.auth.validation.ValidatePasswordUseCase
 import com.kproject.quotes.domain.usecase.auth.validation.ValidateRepeatedPasswordUseCase
 import com.kproject.quotes.domain.usecase.auth.validation.ValidateUsernameUseCase
-import com.kproject.quotes.domain.usecase.preference.SavePreferenceUseCase
-import com.kproject.quotes.presentation.screens.auth.utils.toAuthErrorMessage
-import com.kproject.quotes.presentation.screens.auth.utils.toErrorMessage
+import com.kproject.quotes.presentation.utils.toAuthErrorMessage
+import com.kproject.quotes.presentation.utils.toErrorMessage
 import com.kproject.quotes.presentation.utils.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

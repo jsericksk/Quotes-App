@@ -3,6 +3,7 @@ package com.kproject.quotes.data.remote.paging
 import android.net.Uri
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.kproject.quotes.commom.exception.QuoteException
 import com.kproject.quotes.data.remote.model.quotes.toQuoteModel
 import com.kproject.quotes.data.remote.service.QuotesApiService
 import com.kproject.quotes.domain.model.quotes.QuoteModel
@@ -36,13 +37,14 @@ class QuotesApiPagingSource(
                         nextKey = nextPage
                     )
                 }
+            } else {
+                if (response.code() == 404) {
+                    return LoadResult.Error(QuoteException.NoQuoteFound)
+                }
             }
-
-            // TODO: Adicionar verificação de frases não encontradas para certos usuários
-
-            return LoadResult.Error(Exception("Unknown error loading quotes"))
+            LoadResult.Error(QuoteException.UnknownError)
         } catch (e: Exception) {
-            LoadResult.Error(e)
+            LoadResult.Error(QuoteException.UnknownError)
         }
     }
 

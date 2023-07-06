@@ -1,10 +1,10 @@
-package com.kproject.quotes.presentation.screens.auth.utils
+package com.kproject.quotes.presentation.utils
 
 import com.kproject.quotes.R
 import com.kproject.quotes.commom.exception.AuthException
 import com.kproject.quotes.commom.exception.BaseException
+import com.kproject.quotes.commom.exception.QuoteException
 import com.kproject.quotes.commom.exception.ValidationState
-import com.kproject.quotes.presentation.utils.UiText
 
 fun ValidationState.toErrorMessage(): UiText {
     return when (this) {
@@ -27,5 +27,13 @@ fun BaseException.toAuthErrorMessage(): UiText  {
         AuthException.UnknownLoginException -> UiText.StringResource(R.string.error_login)
         AuthException.UnknownSignUpException -> UiText.StringResource(R.string.error_signup)
         else -> UiText.StringResource(R.string.unknown_error)
+    }
+}
+
+fun BaseException.toQuoteErrorMessage(): UiText  {
+    return when (this) {
+        QuoteException.NoQuoteFound -> UiText.StringResource(R.string.no_quote_found)
+        QuoteException.UnknownError -> UiText.StringResource(R.string.error_loading_quotes)
+        else -> UiText.StringResource(R.string.error_loading_quotes)
     }
 }

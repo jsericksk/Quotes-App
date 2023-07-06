@@ -22,6 +22,7 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,8 +39,10 @@ import androidx.compose.ui.unit.sp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.kproject.quotes.R
+import com.kproject.quotes.commom.exception.QuoteException
 import com.kproject.quotes.presentation.model.Quote
 import com.kproject.quotes.presentation.utils.Utils
+import com.kproject.quotes.presentation.utils.toQuoteErrorMessage
 
 @Composable
 fun QuotesList(
@@ -68,6 +71,9 @@ fun QuotesList(
             }
             is LoadState.Error -> {
                 item {
+                    val errorMessage = remember {
+                        (state.error as QuoteException).toQuoteErrorMessage()
+                    }
                     Column(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -75,7 +81,7 @@ fun QuotesList(
                     ) {
                         EmptyListInfo(
                             iconResId = R.drawable.outline_error_outline_24,
-                            title = stringResource(id = R.string.error_loading_quotes)
+                            title = errorMessage.asString()
                         )
                         Spacer(Modifier.height(8.dp))
                         RetryButton(
