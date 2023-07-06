@@ -80,6 +80,22 @@ class AuthRepositoryImpl(
         }
     }
 
+    override suspend fun logout(): ResultState<Unit> {
+        return try {
+            preferenceRepository.savePreference(
+                key = PrefsConstants.IsUserLoggedIn,
+                value = false
+            )
+            preferenceRepository.savePreference(
+                key = PrefsConstants.LoggedInUserInfo,
+                value = LoggedInUserModel().toJson()
+            )
+            ResultState.Success()
+        } catch (e: Exception) {
+            ResultState.Error()
+        }
+    }
+
     private fun saveUserInfo(accessToken: String) {
         try {
             val jwt = JWT(accessToken)

@@ -2,6 +2,7 @@ package com.kproject.quotes.presentation.di
 
 import com.kproject.quotes.domain.repository.AuthRepository
 import com.kproject.quotes.domain.usecase.auth.LoginUseCase
+import com.kproject.quotes.domain.usecase.auth.LogoutUseCase
 import com.kproject.quotes.domain.usecase.auth.SignUpUseCase
 import com.kproject.quotes.domain.usecase.auth.validation.EmailValidator
 import com.kproject.quotes.domain.usecase.auth.validation.ValidateEmailUseCase
@@ -32,6 +33,12 @@ object AuthDomainModule {
     @Singleton
     fun provideLoginUseCase(authRepository: AuthRepository): LoginUseCase {
         return LoginUseCase(authRepository::login)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLogoutUseCase(authRepository: AuthRepository): LogoutUseCase {
+        return LogoutUseCase(authRepository::logout)
     }
 
     @Provides

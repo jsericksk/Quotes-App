@@ -10,4 +10,6 @@ interface AuthRepository {
     suspend fun signUp(signUpModel: SignUpModel): Flow<ResultState<Unit>>
 
     suspend fun login(loginModel: LoginModel): Flow<ResultState<Unit>>
+
+    suspend fun logout(): ResultState<Unit>
 }
