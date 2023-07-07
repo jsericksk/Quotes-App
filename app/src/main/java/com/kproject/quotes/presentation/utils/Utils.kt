@@ -4,8 +4,13 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 
 object Utils {
+
+    fun showToast(context: Context, message: String, duration: Int = Toast.LENGTH_SHORT) {
+        Toast.makeText(context, message, duration).show()
+    }
 
     fun copyToClipBoard(context: Context, text: String) {
         val clipBoard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager

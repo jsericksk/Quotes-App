@@ -40,23 +40,23 @@ class UserProfileViewModel @Inject constructor(
         return quotesRepository.getQuotesFromUserId(
             filter = _uiState.value.searchQuery,
             userId = loggedInUserModel.userId
-        ).cachedIn(viewModelScope).map { pagingDataModel ->
+        ).map { pagingDataModel ->
             pagingDataModel.map { quoteModel ->
                 quoteModel.fromModel()
             }
-        }
+        }.cachedIn(viewModelScope)
     }
 
-    fun editQuote(quote: Quote, onSuccess: () -> Unit, onError: () -> Unit) {
+    fun editQuote(quote: Quote, onResult: (error: Boolean) -> Unit) {
         viewModelScope.launch {
             val result = quotesRepository.updateById(quote.toModel())
             result.collect { resultState ->
                 when (resultState) {
                     is ResultState.Success -> {
-                        onSuccess.invoke()
+                        onResult.invoke(false)
                     }
                     is ResultState.Error -> {
-                        onError.invoke()
+                        onResult.invoke(true)
                     }
                     else -> {}
                 }
@@ -64,16 +64,16 @@ class UserProfileViewModel @Inject constructor(
         }
     }
 
-    fun deleteQuote(quote: Quote, onSuccess: () -> Unit, onError: () -> Unit) {
+    fun deleteQuote(quote: Quote, onResult: (error: Boolean) -> Unit) {
         viewModelScope.launch {
             val result = quotesRepository.deleteById(quote.id)
             result.collect { resultState ->
                 when (resultState) {
                     is ResultState.Success -> {
-                       onSuccess.invoke()
+                       onResult.invoke(false)
                     }
                     is ResultState.Error -> {
-                       onError.invoke()
+                        onResult.invoke(true)
                     }
                     else -> {}
                 }

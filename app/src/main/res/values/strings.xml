@@ -43,7 +43,10 @@
 
     <string name="edit_quote">Edit</string>
     <string name="delete_quote">Delete</string>
-    <string name="delete_quote_confirmation">Are you sure you want to delete quote?</string>
+    <string name="delete_quote_confirmation">Are you sure you want to delete this quote?</string>
+    <string name="deleting_quote">Deleting quote. Wait a moment.</string>
+    <string name="error_deleting_quote">Error deleting quote. Please try again.</string>
+    <string name="quote_deleted_successfully">Quote deleted successfully.</string>
 
     <string name="quote_text">Quote</string>
     <string name="quote_author">Author</string>
