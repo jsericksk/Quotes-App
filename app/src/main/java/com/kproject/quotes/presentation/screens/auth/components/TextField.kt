@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -98,6 +99,10 @@ fun TextField(
                 unfocusedBorderColor = Color.Transparent,
                 errorContainerColor = MaterialTheme.colorScheme.surface.copy(0.5f),
                 errorBorderColor = Color.Transparent,
+                selectionColors = TextSelectionColors(
+                    handleColor = MaterialTheme.colorScheme.onSurface.copy(0.7f),
+                    backgroundColor = MaterialTheme.colorScheme.background
+                )
             ),
             modifier = modifier.fillMaxWidth()
         )
