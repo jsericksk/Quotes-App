@@ -51,7 +51,7 @@ fun HomeScreen(
 ) {
     val homeViewModel: HomeViewModel = hiltViewModel()
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
-    val quotes = homeViewModel.getQuotes().collectAsLazyPagingItems()
+    val quotes = homeViewModel.quotes.collectAsLazyPagingItems()
 
     MainContent(
         uiState = uiState,

@@ -32,6 +32,12 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> get() = _uiState
 
+    val quotes: Flow<PagingData<Quote>> = quotesRepository.getAllQuotes(
+        filter = _uiState.value.searchQuery
+    ).map { pagingDataModel ->
+        pagingDataModel.map { quoteModel -> quoteModel.fromModel() }
+    }.cachedIn(viewModelScope)
+
     init {
         getLoggedInUser()
     }
@@ -44,24 +50,6 @@ class HomeViewModel @Inject constructor(
         _uiState.update {
             it.copy(loggedInUsername = loggedInUserModel.username)
         }
-    }
-
-    fun getQuotes(): Flow<PagingData<Quote>> {
-        return quotesRepository.getAllQuotes(filter = _uiState.value.searchQuery)
-            .cachedIn(viewModelScope).map { pagingDataModel ->
-                pagingDataModel.map { quoteModel ->
-                    quoteModel.fromModel()
-                }
-            }
-    }
-
-    fun getSearchedQuotes(): Flow<PagingData<Quote>> {
-        return quotesRepository.getAllQuotes(filter = _uiState.value.searchQuery)
-            .cachedIn(viewModelScope).map { pagingDataModel ->
-                pagingDataModel.map { quoteModel ->
-                    quoteModel.fromModel()
-                }
-            }
     }
 
     fun onSearchQueryChange(searchQuery: String) {

@@ -38,7 +38,7 @@ fun UserProfileScreen(
     val context = LocalContext.current
     val userProfileViewModel: UserProfileViewModel = hiltViewModel()
     val uiState by userProfileViewModel.uiState.collectAsStateWithLifecycle()
-    val quotes = userProfileViewModel.getQuotesFromUser().collectAsLazyPagingItems()
+    val quotes = userProfileViewModel.quotes.collectAsLazyPagingItems()
 
     var quoteToModify: Quote? by remember { mutableStateOf(null) }
     var showDeleteQuoteDialog by remember { mutableStateOf(false) }

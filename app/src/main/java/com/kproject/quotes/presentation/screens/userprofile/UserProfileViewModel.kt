@@ -31,19 +31,18 @@ class UserProfileViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(UserProfileUiState())
     val uiState: StateFlow<UserProfileUiState> get() = _uiState
 
-    fun getQuotesFromUser(): Flow<PagingData<Quote>> {
+    var quotes: Flow<PagingData<Quote>>
+
+    init {
         val loggedInUserModel = getPreferenceUseCase(
             key = PrefsConstants.LoggedInUserInfo,
             defaultValue = LoggedInUserModel().toJson()
         ).fromJson(LoggedInUserModel::class.java)
-
-        return quotesRepository.getQuotesFromUserId(
+        quotes = quotesRepository.getQuotesFromUserId(
             filter = _uiState.value.searchQuery,
             userId = loggedInUserModel.userId
         ).map { pagingDataModel ->
-            pagingDataModel.map { quoteModel ->
-                quoteModel.fromModel()
-            }
+            pagingDataModel.map { quoteModel -> quoteModel.fromModel() }
         }.cachedIn(viewModelScope)
     }
 
