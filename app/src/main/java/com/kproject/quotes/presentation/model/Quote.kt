@@ -29,3 +29,6 @@ val fakeQuotesList = (0..20).map { index ->
 
 fun QuoteModel.fromModel() =
         Quote(id, quote, author, postedByUsername, postedByUserId, publicationDate)
+
+fun Quote.toModel() =
+        QuoteModel(id, quote, author, postedByUsername, postedByUserId, publicationDate)
