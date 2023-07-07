@@ -192,7 +192,7 @@ private fun UserProfileDialog(
                         .padding(6.dp)
                 )
                 Text(
-                    text = stringResource(id = R.string.view_my_quotes),
+                    text = stringResource(id = R.string.my_quotes),
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }

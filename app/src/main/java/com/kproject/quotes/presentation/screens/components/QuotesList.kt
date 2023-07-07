@@ -59,8 +59,8 @@ fun QuotesList(
     modifier: Modifier = Modifier,
     quotes: LazyPagingItems<Quote>,
     showActionOptions: Boolean,
+    onEditQuote: (Quote) -> Unit = {},
     onDeleteQuote: (Quote) -> Unit = {},
-    onEditQuote: (Quote) -> Unit = {}
 ) {
     LazyColumn(modifier = modifier.fillMaxSize()) {
         when (val state = quotes.loadState.refresh) {
@@ -156,8 +156,8 @@ private fun QuotesListItem(
     quote: Quote,
     onClick: () -> Unit,
     showActionOptions: Boolean,
+    onEditQuote: (Quote) -> Unit,
     onDeleteQuote: (Quote) -> Unit,
-    onEditQuote: (Quote) -> Unit
 ) {
     Card(
         colors = CardDefaults.cardColors(

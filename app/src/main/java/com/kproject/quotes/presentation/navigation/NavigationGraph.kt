@@ -65,6 +65,18 @@ fun NavigationGraph() {
         // HomeScreen
         composable(
             route = Screen.HomeScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(700)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(700)
+                )
+            }
         ) {
             HomeScreen(
                 onNavigateToUserProfileScreen = {
@@ -82,6 +94,18 @@ fun NavigationGraph() {
         // UserProfileScreen
         composable(
             route = Screen.UserProfileScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(700)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(700)
+                )
+            }
         ) {
             UserProfileScreen(
                 onNavigateBack = {

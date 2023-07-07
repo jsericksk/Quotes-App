@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.kproject.quotes.presentation.custompagination.CustomPagination
+import com.kproject.quotes.presentation.navigation.NavigationGraph
 import com.kproject.quotes.presentation.theme.QuotesTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,8 +22,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    // NavigationGraph()
-                    CustomPagination()
+                    NavigationGraph()
+                    // CustomPagination()
                 }
             }
         }
