@@ -26,8 +26,8 @@
     <string name="error_wrong_email_or_password">Wrong email or password.</string>
     <string name="error_login">There was an error trying to login.</string>
     <string name="error_signup">There was an error trying to register.</string>
-    <string name="error_email_not_available">Email not available.</string>
-    <string name="error_username_not_available">Username not available.</string>
+    <string name="error_email_already_exists">Email already exists. Try using another one.</string>
+    <string name="error_username_already_exists">Username already exists. Try using another one.</string>
     <string name="error_when_trying_to_auto_login">Your account was created successfully, but there
         was an error trying to auto-login. Try logging in again at the login screen.</string>
 

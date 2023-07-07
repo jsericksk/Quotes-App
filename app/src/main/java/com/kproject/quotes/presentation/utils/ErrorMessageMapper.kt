@@ -21,8 +21,8 @@ fun ValidationState.toErrorMessage(): UiText {
 
 fun BaseException.toAuthErrorMessage(): UiText  {
     return when (this) {
-        AuthException.EmailNotAvailableException -> UiText.StringResource(R.string.error_email_not_available)
-        AuthException.UsernameNotAvailableException -> UiText.StringResource(R.string.error_username_not_available)
+        AuthException.EmailNotAvailableException -> UiText.StringResource(R.string.error_email_already_exists)
+        AuthException.UsernameNotAvailableException -> UiText.StringResource(R.string.error_username_already_exists)
         AuthException.WrongEmailOrPasswordException -> UiText.StringResource(R.string.error_wrong_email_or_password)
         AuthException.UnknownLoginException -> UiText.StringResource(R.string.error_login)
         AuthException.UnknownSignUpException -> UiText.StringResource(R.string.error_signup)

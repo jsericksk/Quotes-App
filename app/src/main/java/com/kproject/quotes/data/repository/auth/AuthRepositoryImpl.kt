@@ -15,8 +15,8 @@ import com.kproject.quotes.domain.repository.PreferenceRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-const val EmailNotAvailableCode = "email_not_available"
-const val UsernameNotAvailableCode = "username_not_available"
+const val EmailNotAvailableCode = "email_already_exists"
+const val UsernameNotAvailableCode = "username_already_exists"
 
 class AuthRepositoryImpl(
     private val tokenManagerRepository: TokenManagerRepository,
