@@ -41,6 +41,7 @@ fun LoginScreen(
     val uiState = loginViewModel.uiState
     val isUserLoggedIn = uiState.isUserLoggedIn
 
+    // TODO: Corrigir problema de renderizar tela sem abrir HomeScreen
     LaunchedEffect(isUserLoggedIn) {
         if (isUserLoggedIn) {
             onNavigateToHomeScreen.invoke()
