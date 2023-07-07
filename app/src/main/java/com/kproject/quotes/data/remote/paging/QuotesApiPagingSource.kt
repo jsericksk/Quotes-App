@@ -1,12 +1,17 @@
 package com.kproject.quotes.data.remote.paging
 
 import android.net.Uri
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.kproject.quotes.commom.exception.QuoteException
 import com.kproject.quotes.data.remote.model.quotes.toQuoteModel
 import com.kproject.quotes.data.remote.service.QuotesApiService
+import com.kproject.quotes.data.toErrorResponse
 import com.kproject.quotes.domain.model.quotes.QuoteModel
+
+const val QuoteNotFoundCode = "search_without_results"
+const val UserWithoutPostsCode = "user_without_posts"
 
 class QuotesApiPagingSource(
     private val quotesApiService: QuotesApiService,
@@ -39,7 +44,19 @@ class QuotesApiPagingSource(
                 }
             } else {
                 if (response.code() == 404) {
-                    return LoadResult.Error(QuoteException.NoQuoteFound)
+                    val errorResponse = response.errorBody().toErrorResponse()
+                    errorResponse?.let { error ->
+                        when (error.errorCode) {
+                            QuoteNotFoundCode -> {
+                                return LoadResult.Error(QuoteException.NoQuoteFound)
+                            }
+                            UserWithoutPostsCode -> {
+                                return LoadResult.Error(QuoteException.UserWithoutPosts)
+                            }
+                            else -> {}
+                        }
+                    }
+                    return LoadResult.Error(QuoteException.UnknownError)
                 }
             }
             LoadResult.Error(QuoteException.UnknownError)

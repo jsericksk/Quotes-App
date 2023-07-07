@@ -87,8 +87,21 @@ fun QuotesList(
             }
             is LoadState.Error -> {
                 item {
-                    val errorMessage = remember(state.error) {
-                        (state.error as QuoteException).toQuoteErrorMessage()
+                    val quoteException = remember(state.error) {
+                        (state.error as QuoteException)
+                    }
+                    val errorMessage = remember(quoteException) {
+                        quoteException.toQuoteErrorMessage()
+                    }
+                    val showRetryButton = remember(quoteException) {
+                        quoteException != QuoteException.UserWithoutPosts
+                    }
+                    val infoIconResId = remember(quoteException) {
+                        if (quoteException == QuoteException.UserWithoutPosts) {
+                            R.drawable.outline_format_quote_24
+                        } else {
+                            R.drawable.outline_error_outline_24
+                        }
                     }
                     Column(
                         verticalArrangement = Arrangement.Center,
@@ -96,14 +109,16 @@ fun QuotesList(
                         modifier = Modifier.fillParentMaxSize()
                     ) {
                         EmptyListInfo(
-                            iconResId = R.drawable.outline_error_outline_24,
+                            iconResId = infoIconResId,
                             title = errorMessage.asString()
                         )
-                        Spacer(Modifier.height(8.dp))
-                        RetryButton(
-                            onClick = { quotes.retry() },
-                            modifier = Modifier.padding(8.dp)
-                        )
+                        if (showRetryButton) {
+                            Spacer(Modifier.height(8.dp))
+                            RetryButton(
+                                onClick = { quotes.retry() },
+                                modifier = Modifier.padding(8.dp)
+                            )
+                        }
                     }
                 }
             }

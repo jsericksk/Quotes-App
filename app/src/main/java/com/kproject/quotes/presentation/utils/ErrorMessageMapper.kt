@@ -32,8 +32,9 @@ fun BaseException.toAuthErrorMessage(): UiText  {
 
 fun BaseException.toQuoteErrorMessage(): UiText  {
     return when (this) {
-        QuoteException.NoQuoteFound -> UiText.StringResource(R.string.no_quote_found)
-        QuoteException.UnknownError -> UiText.StringResource(R.string.error_loading_quotes)
+        QuoteException.NoQuoteFound -> UiText.StringResource(R.string.no_quote_found_in_search)
+        QuoteException.UserWithoutPosts -> UiText.StringResource(R.string.user_without_posts)
+        QuoteException.QuoteDoesNotExist -> UiText.StringResource(R.string.quote_does_not_exist)
         else -> UiText.StringResource(R.string.error_loading_quotes)
     }
 }
