@@ -18,7 +18,7 @@ interface QuotesRepository {
 
     suspend fun create(quoteModel: QuoteModel): Flow<ResultState<QuoteModel>>
 
-    suspend fun updateById(id: Int): Flow<ResultState<QuoteModel>>
+    suspend fun updateById(quoteModel: QuoteModel): Flow<ResultState<Unit>>
 
     suspend fun deleteById(id: Int): Flow<ResultState<Unit>>
 }
