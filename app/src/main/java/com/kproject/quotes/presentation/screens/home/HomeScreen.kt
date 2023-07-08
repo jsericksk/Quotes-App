@@ -88,6 +88,7 @@ fun HomeScreen(
                 postQuote = postQuote,
                 onSuccess = { quote ->
                     showPostingQuoteProgressDialog = false
+                    quotes.refresh()
                     Utils.showToast(
                         context = context,
                         message = context.getString(R.string.quote_posted_successfully)
