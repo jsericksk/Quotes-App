@@ -8,7 +8,6 @@ import androidx.paging.map
 import com.kproject.quotes.commom.ResultState
 import com.kproject.quotes.commom.constants.PrefsConstants
 import com.kproject.quotes.data.fromJson
-import com.kproject.quotes.data.remote.model.quotes.toBody
 import com.kproject.quotes.data.toJson
 import com.kproject.quotes.domain.model.LoggedInUserModel
 import com.kproject.quotes.domain.model.quotes.QuoteModel
@@ -19,16 +18,13 @@ import com.kproject.quotes.domain.usecase.quotes.validation.QuoteInputValidation
 import com.kproject.quotes.presentation.model.PostQuote
 import com.kproject.quotes.presentation.model.Quote
 import com.kproject.quotes.presentation.model.fromModel
-import com.kproject.quotes.presentation.model.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.text.Typography.quote
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -40,14 +36,21 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> get() = _uiState
 
-    val quotes: Flow<PagingData<Quote>> = quotesRepository.getAllQuotes(
-        filter = _uiState.value.searchQuery
-    ).map { pagingDataModel ->
-        pagingDataModel.map { quoteModel -> quoteModel.fromModel() }
-    }.cachedIn(viewModelScope)
+    private val _quotes = MutableStateFlow<PagingData<Quote>>(PagingData.empty())
+    val quotes: Flow<PagingData<Quote>> = _quotes
 
     init {
+        getQuotes()
         getLoggedInUser()
+    }
+
+    private fun getQuotes() {
+        viewModelScope.launch {
+            quotesRepository.getAllQuotes(filter = "").cachedIn(viewModelScope)
+                .collect { pagingDataModel ->
+                    _quotes.value = pagingDataModel.map { quoteModel -> quoteModel.fromModel() }
+                }
+        }
     }
 
     private fun getLoggedInUser() {
@@ -57,6 +60,22 @@ class HomeViewModel @Inject constructor(
         ).fromJson(LoggedInUserModel::class.java)
         _uiState.update {
             it.copy(loggedInUsername = loggedInUserModel.username)
+        }
+    }
+
+    fun searchQuote() {
+        viewModelScope.launch {
+            quotesRepository.getAllQuotes(
+                filter = _uiState.value.searchQuery
+            ).cachedIn(viewModelScope).collect { pagingDataModel ->
+                _quotes.value = pagingDataModel.map { quoteModel -> quoteModel.fromModel() }
+            }
+        }
+    }
+
+    fun clearSearch() {
+        if (_uiState.value.searchQuery.isBlank()) {
+            getQuotes()
         }
     }
 

@@ -65,6 +65,12 @@ fun HomeScreen(
         uiState = uiState,
         quotes = quotes,
         onSearchQueryChange = homeViewModel::onSearchQueryChange,
+        onSearchQuote = {
+            homeViewModel.searchQuote()
+        },
+        onClearSearch = {
+            homeViewModel.clearSearch()
+        },
         onNavigateToUserProfileScreen = onNavigateToUserProfileScreen,
         onPostQuote = { showPostBottomSheet = true },
         onLogout = {
@@ -116,6 +122,8 @@ private fun MainContent(
     uiState: HomeUiState,
     quotes: LazyPagingItems<Quote>,
     onSearchQueryChange: (String) -> Unit,
+    onSearchQuote: (String) -> Unit,
+    onClearSearch: () -> Unit,
     onNavigateToUserProfileScreen: () -> Unit,
     onLogout: () -> Unit,
     onPostQuote: () -> Unit,
@@ -144,7 +152,7 @@ private fun MainContent(
             CustomSearchBar(
                 query = uiState.searchQuery,
                 onQueryChange = onSearchQueryChange,
-                onSearch = {},
+                onSearch = onSearchQuote,
                 trailingIcon = {
                     IconButton(onClick = { showLogoutDialog = true }) {
                         Icon(
@@ -158,7 +166,12 @@ private fun MainContent(
                 },
                 modifier = Modifier
                     .padding(paddingValues)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                onActiveChange = { isActive ->
+                    if (!isActive) {
+                        onClearSearch.invoke()
+                    }
+                }
             )
 
             QuotesList(
