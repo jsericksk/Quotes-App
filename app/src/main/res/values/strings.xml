@@ -50,8 +50,13 @@
     <string name="error_deleting_quote">Error deleting quote. Please try again.</string>
     <string name="quote_deleted_successfully">Quote deleted successfully.</string>
 
+    <string name="post_quote">Post Quote</string>
     <string name="quote_text">Quote</string>
     <string name="quote_author">Author</string>
+    <string name="error_quote_text_allowed_characters">Quote text must be a minimum of 7 characters
+        and a maximum of 1000</string>
+    <string name="error_quote_author_allowed_characters">Quote author must be a minimum of 1 character
+        and a maximum of 80</string>
 
 
 </resources>

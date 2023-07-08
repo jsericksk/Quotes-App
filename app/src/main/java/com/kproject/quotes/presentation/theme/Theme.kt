@@ -14,11 +14,14 @@ import androidx.core.view.ViewCompat
 private val DarkColorScheme = darkColorScheme(
     primary = primaryDark,
     onPrimary = onPrimaryDark,
+    primaryContainer = primaryContainerDark,
+    onPrimaryContainer = onPrimaryContainerDark,
     secondary = secondaryDark,
     onSecondary = onSecondaryDark,
     background = backgroundDark,
     surface = surfaceDark,
-    onSurface = onSurfaceDark
+    onSurface = onSurfaceDark,
+    errorContainer = errorContainerDark
 )
 
 @Composable

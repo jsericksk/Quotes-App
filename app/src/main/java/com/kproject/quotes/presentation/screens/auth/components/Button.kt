@@ -33,7 +33,7 @@ fun AuthButton(
         Text(
             text = text,
             fontSize = 18.sp,
-            color = Color.White
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
