@@ -115,7 +115,7 @@ fun TextField(
             Spacer(Modifier.height(6.dp))
             Text(
                 text = errorMessage,
-                color = MaterialTheme.colorScheme.surface,
+                color = MaterialTheme.colorScheme.errorContainer,
                 fontSize = 16.sp,
                 modifier = Modifier.padding(start = 6.dp)
             )

@@ -40,7 +40,7 @@ import com.kproject.quotes.R
 import com.kproject.quotes.presentation.model.Quote
 import com.kproject.quotes.presentation.screens.components.CustomAlertDialog
 import com.kproject.quotes.presentation.screens.components.CustomSearchBar
-import com.kproject.quotes.presentation.screens.components.QuotesList
+import com.kproject.quotes.presentation.screens.components.quotes.QuotesList
 import com.kproject.quotes.presentation.screens.components.SimpleAlertDialog
 import com.kproject.quotes.presentation.theme.PreviewTheme
 

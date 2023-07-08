@@ -1,4 +1,4 @@
-package com.kproject.quotes.presentation.screens.components
+package com.kproject.quotes.presentation.screens.components.quotes
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +20,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kproject.quotes.R
+import com.kproject.quotes.commom.validation.QuoteValidationState
+import com.kproject.quotes.domain.usecase.quotes.validation.QuoteInputValidationUseCase
+import com.kproject.quotes.presentation.model.PostQuote
+import com.kproject.quotes.presentation.utils.UiText
+import com.kproject.quotes.presentation.utils.toErrorMessage
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -28,17 +34,17 @@ fun PostBottomSheet(
     onDismiss: () -> Unit,
     bottomSheetTitle: String,
     bottomSheetButtonTitle: String,
-    onButtonClick: () -> Unit,
-    quoteTitle: String,
-    onQuoteTitleChange: (String) -> Unit,
-    quoteTitleFieldErrorMessage: String,
-    quoteAuthor: String,
-    onQuoteAuthorChange: (String) -> Unit,
-    quoteAuthorFieldErrorMessage: String
+    defaultPostQuote: PostQuote,
+    quoteInputValidationUseCase: QuoteInputValidationUseCase,
+    onButtonClick: (PostQuote) -> Unit
 ) {
     if (showBottomSheet) {
         val bottomSheetState = rememberModalBottomSheetState()
         val coroutineScope = rememberCoroutineScope()
+        val postBottomSheetState = rememberPostBottomSheet(
+            postQuote = defaultPostQuote,
+            quoteInputValidationUseCase = quoteInputValidationUseCase
+        )
 
         ModalBottomSheet(
             sheetState = bottomSheetState,
@@ -64,21 +70,25 @@ fun PostBottomSheet(
                 Spacer(Modifier.height(16.dp))
 
                 TextField(
-                    value = quoteTitle,
-                    onValueChange = onQuoteTitleChange,
+                    value = postBottomSheetState.quoteText,
+                    onValueChange = { value ->
+                        postBottomSheetState.onQuoteTextChange(value)
+                    },
                     hint = stringResource(id = R.string.quote_text),
-                    errorMessage = quoteTitleFieldErrorMessage,
+                    errorMessage = postBottomSheetState.quoteTextErrorMessage.asString(),
                     modifier = Modifier.height(150.dp)
                 )
 
                 Spacer(Modifier.height(8.dp))
 
                 TextField(
-                    value = quoteAuthor,
-                    onValueChange = onQuoteAuthorChange,
+                    value = postBottomSheetState.quoteAuthor,
+                    onValueChange = { value ->
+                        postBottomSheetState.onQuoteAuthorChange(value)
+                    },
                     hint = stringResource(id = R.string.quote_author),
                     singleLine = true,
-                    errorMessage = quoteAuthorFieldErrorMessage,
+                    errorMessage = postBottomSheetState.quoteAuthorErrorMessage.asString(),
                 )
 
                 Spacer(Modifier.height(18.dp))
@@ -86,7 +96,11 @@ fun PostBottomSheet(
                 Button(
                     onClick = {
                         coroutineScope.launch {
-                            onButtonClick.invoke()
+                            val postQuote = PostQuote(
+                                quote = postBottomSheetState.quoteText,
+                                author = postBottomSheetState.quoteAuthor
+                            )
+                            onButtonClick.invoke(postQuote)
                             bottomSheetState.hide()
                             onDismiss.invoke()
                         }
@@ -167,3 +181,47 @@ private fun TextField(
         }
     }
 }
+
+private class PostBottomSheetState(
+    postQuote: PostQuote,
+    private val quoteInputValidationUseCase: QuoteInputValidationUseCase
+) {
+    var quoteText: String = postQuote.quote
+        private set
+    var quoteAuthor: String = postQuote.author
+        private set
+    var quoteTextErrorMessage: UiText = UiText.HardcodedString("")
+        private set
+    var quoteAuthorErrorMessage: UiText = UiText.HardcodedString("")
+        private set
+
+    fun onQuoteTextChange(text: String) {
+        quoteText = text
+    }
+
+    fun onQuoteAuthorChange(author: String) {
+        quoteAuthor = author
+    }
+
+    fun validateFields(): Boolean {
+        val quoteInputValidationState = quoteInputValidationUseCase(quoteText, quoteAuthor)
+        val errorMessage = quoteInputValidationState.toErrorMessage()
+        if (quoteInputValidationState == QuoteValidationState.QuoteTextInvalid) {
+            quoteTextErrorMessage = errorMessage
+        } else if (quoteInputValidationState == QuoteValidationState.QuoteTextInvalid) {
+            quoteAuthorErrorMessage = errorMessage
+        }
+        return (quoteInputValidationState != QuoteValidationState.Success)
+    }
+}
+
+@Composable
+private fun rememberPostBottomSheet(
+    postQuote: PostQuote,
+    quoteInputValidationUseCase: QuoteInputValidationUseCase
+): PostBottomSheetState {
+    return remember(postQuote) {
+        PostBottomSheetState(postQuote, quoteInputValidationUseCase)
+    }
+}
+

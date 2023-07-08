@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kproject.quotes.R
 import com.kproject.quotes.presentation.navigation.NavigationGraph
-import com.kproject.quotes.presentation.screens.components.PostBottomSheet
+import com.kproject.quotes.presentation.screens.components.quotes.PostBottomSheet
 import com.kproject.quotes.presentation.theme.QuotesTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

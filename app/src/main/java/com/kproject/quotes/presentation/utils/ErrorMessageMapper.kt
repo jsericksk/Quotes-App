@@ -5,6 +5,7 @@ import com.kproject.quotes.commom.exception.AuthException
 import com.kproject.quotes.commom.exception.BaseException
 import com.kproject.quotes.commom.exception.QuoteException
 import com.kproject.quotes.commom.exception.ValidationState
+import com.kproject.quotes.commom.validation.QuoteValidationState
 
 fun ValidationState.toErrorMessage(): UiText {
     return when (this) {
@@ -16,6 +17,14 @@ fun ValidationState.toErrorMessage(): UiText {
         ValidationState.EmptyUsername -> UiText.StringResource(R.string.error_username_empty)
         ValidationState.InvalidUsername -> UiText.StringResource(R.string.error_invalid_username)
         else -> UiText.HardcodedString("")
+    }
+}
+
+fun QuoteValidationState.toErrorMessage(): UiText {
+    return when (this) {
+        QuoteValidationState.QuoteTextInvalid -> UiText.StringResource(R.string.error_quote_text_allowed_characters)
+        QuoteValidationState.QuoteAuthorInvalid -> UiText.StringResource(R.string.error_quote_author_allowed_characters)
+        QuoteValidationState.Success -> UiText.HardcodedString("")
     }
 }
 

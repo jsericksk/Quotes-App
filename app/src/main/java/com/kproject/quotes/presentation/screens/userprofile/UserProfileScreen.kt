@@ -27,7 +27,7 @@ import com.kproject.quotes.R
 import com.kproject.quotes.presentation.model.Quote
 import com.kproject.quotes.presentation.screens.components.CenterTopBar
 import com.kproject.quotes.presentation.screens.components.ProgressAlertDialog
-import com.kproject.quotes.presentation.screens.components.QuotesList
+import com.kproject.quotes.presentation.screens.components.quotes.QuotesList
 import com.kproject.quotes.presentation.screens.components.SimpleAlertDialog
 import com.kproject.quotes.presentation.utils.Utils
 

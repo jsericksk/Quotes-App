@@ -1,4 +1,4 @@
-package com.kproject.quotes.presentation.screens.components
+package com.kproject.quotes.presentation.screens.components.quotes
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -51,6 +51,8 @@ import androidx.paging.compose.LazyPagingItems
 import com.kproject.quotes.R
 import com.kproject.quotes.commom.exception.QuoteException
 import com.kproject.quotes.presentation.model.Quote
+import com.kproject.quotes.presentation.screens.components.EmptyListInfo
+import com.kproject.quotes.presentation.screens.components.ProgressIndicator
 import com.kproject.quotes.presentation.utils.Utils
 import com.kproject.quotes.presentation.utils.toQuoteErrorMessage
 
