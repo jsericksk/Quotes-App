@@ -8,8 +8,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,7 +44,7 @@ fun PostBottomSheet(
     if (showBottomSheet) {
         val bottomSheetState = rememberModalBottomSheetState()
         val coroutineScope = rememberCoroutineScope()
-        val postBottomSheetState = rememberPostBottomSheet(
+        val postBottomSheetState = rememberPostBottomSheetState(
             postQuote = defaultPostQuote,
             quoteInputValidationUseCase = quoteInputValidationUseCase
         )
@@ -76,7 +79,7 @@ fun PostBottomSheet(
                     },
                     hint = stringResource(id = R.string.quote_text),
                     errorMessage = postBottomSheetState.quoteTextErrorMessage.asString(),
-                    modifier = Modifier.height(150.dp)
+                    modifier = Modifier.height(200.dp)
                 )
 
                 Spacer(Modifier.height(8.dp))
@@ -96,13 +99,15 @@ fun PostBottomSheet(
                 Button(
                     onClick = {
                         coroutineScope.launch {
-                            val postQuote = PostQuote(
-                                quote = postBottomSheetState.quoteText,
-                                author = postBottomSheetState.quoteAuthor
-                            )
-                            onButtonClick.invoke(postQuote)
-                            bottomSheetState.hide()
-                            onDismiss.invoke()
+                            if (!postBottomSheetState.hasValidationError()) {
+                                val postQuote = PostQuote(
+                                    quote = postBottomSheetState.quoteText,
+                                    author = postBottomSheetState.quoteAuthor
+                                )
+                                onButtonClick.invoke(postQuote)
+                                bottomSheetState.hide()
+                                onDismiss.invoke()
+                            }
                         }
                     },
                     shape = MaterialTheme.shapes.medium,
@@ -186,41 +191,58 @@ private class PostBottomSheetState(
     postQuote: PostQuote,
     private val quoteInputValidationUseCase: QuoteInputValidationUseCase
 ) {
-    var quoteText: String = postQuote.quote
+    var quoteText: String by mutableStateOf(postQuote.quote)
         private set
-    var quoteAuthor: String = postQuote.author
+    var quoteAuthor: String by mutableStateOf(postQuote.author)
         private set
-    var quoteTextErrorMessage: UiText = UiText.HardcodedString("")
+    var quoteTextErrorMessage: UiText by mutableStateOf(UiText.HardcodedString(""))
         private set
-    var quoteAuthorErrorMessage: UiText = UiText.HardcodedString("")
+    var quoteAuthorErrorMessage: UiText by mutableStateOf(UiText.HardcodedString(""))
         private set
+
+    private var validateFieldsWhenTyping: Boolean = false
 
     fun onQuoteTextChange(text: String) {
         quoteText = text
+        validateFieldsWhenTyping()
     }
 
     fun onQuoteAuthorChange(author: String) {
         quoteAuthor = author
+        validateFieldsWhenTyping()
     }
 
-    fun validateFields(): Boolean {
-        val quoteInputValidationState = quoteInputValidationUseCase(quoteText, quoteAuthor)
-        val errorMessage = quoteInputValidationState.toErrorMessage()
-        if (quoteInputValidationState == QuoteValidationState.QuoteTextInvalid) {
-            quoteTextErrorMessage = errorMessage
-        } else if (quoteInputValidationState == QuoteValidationState.QuoteTextInvalid) {
-            quoteAuthorErrorMessage = errorMessage
+    fun hasValidationError(): Boolean {
+        validateFieldsWhenTyping = true
+        val validationState =
+                quoteInputValidationUseCase(quote = quoteText, author = quoteAuthor)
+        val errorMessage = validationState.toErrorMessage()
+        quoteTextErrorMessage = if (validationState == QuoteValidationState.QuoteTextInvalid) {
+            errorMessage
+        } else {
+            UiText.HardcodedString("")
         }
-        return (quoteInputValidationState != QuoteValidationState.Success)
+        quoteAuthorErrorMessage = if (validationState == QuoteValidationState.QuoteAuthorInvalid) {
+            errorMessage
+        } else {
+            UiText.HardcodedString("")
+        }
+        return (validationState != QuoteValidationState.Success)
+    }
+
+    private fun validateFieldsWhenTyping() {
+        if (validateFieldsWhenTyping) {
+            hasValidationError()
+        }
     }
 }
 
 @Composable
-private fun rememberPostBottomSheet(
+private fun rememberPostBottomSheetState(
     postQuote: PostQuote,
     quoteInputValidationUseCase: QuoteInputValidationUseCase
 ): PostBottomSheetState {
-    return remember(postQuote) {
+    return remember {
         PostBottomSheetState(postQuote, quoteInputValidationUseCase)
     }
 }

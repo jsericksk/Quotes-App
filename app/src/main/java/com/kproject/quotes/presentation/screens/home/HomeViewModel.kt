@@ -12,6 +12,7 @@ import com.kproject.quotes.domain.model.LoggedInUserModel
 import com.kproject.quotes.domain.repository.QuotesRepository
 import com.kproject.quotes.domain.usecase.auth.LogoutUseCase
 import com.kproject.quotes.domain.usecase.preference.GetPreferenceUseCase
+import com.kproject.quotes.domain.usecase.quotes.validation.QuoteInputValidationUseCase
 import com.kproject.quotes.presentation.model.Quote
 import com.kproject.quotes.presentation.model.fromModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +28,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val quotesRepository: QuotesRepository,
     private val getPreferenceUseCase: GetPreferenceUseCase,
-    private val logoutUseCase: LogoutUseCase
+    private val logoutUseCase: LogoutUseCase,
+    val quoteInputValidationUseCase: QuoteInputValidationUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> get() = _uiState

@@ -5,10 +5,10 @@ import com.kproject.quotes.commom.validation.QuoteValidationState
 class QuoteInputValidationUseCaseImpl : QuoteInputValidationUseCase {
 
     override fun invoke(quote: String, author: String): QuoteValidationState {
-        if (quote.isBlank() || quote.length > 1000) {
+        if (quote.length < 7 || quote.length > 1000) {
             return QuoteValidationState.QuoteTextInvalid
         }
-        if (quote.isBlank() || author.length > 80) {
+        if (author.isBlank() || author.length > 80) {
             return QuoteValidationState.QuoteAuthorInvalid
         }
         return QuoteValidationState.Success

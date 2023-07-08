@@ -22,9 +22,9 @@ fun ValidationState.toErrorMessage(): UiText {
 
 fun QuoteValidationState.toErrorMessage(): UiText {
     return when (this) {
-        QuoteValidationState.QuoteTextInvalid -> UiText.StringResource(R.string.error_quote_text_allowed_characters)
-        QuoteValidationState.QuoteAuthorInvalid -> UiText.StringResource(R.string.error_quote_author_allowed_characters)
-        QuoteValidationState.Success -> UiText.HardcodedString("")
+        QuoteValidationState.QuoteTextInvalid -> UiText.StringResource(R.string.error_quote_text_invalid)
+        QuoteValidationState.QuoteAuthorInvalid -> UiText.StringResource(R.string.error_quote_author_invalid)
+        else -> UiText.HardcodedString("")
     }
 }
 

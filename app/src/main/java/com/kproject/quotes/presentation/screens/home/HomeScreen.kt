@@ -37,11 +37,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.kproject.quotes.R
+import com.kproject.quotes.presentation.model.PostQuote
 import com.kproject.quotes.presentation.model.Quote
 import com.kproject.quotes.presentation.screens.components.CustomAlertDialog
 import com.kproject.quotes.presentation.screens.components.CustomSearchBar
 import com.kproject.quotes.presentation.screens.components.quotes.QuotesList
 import com.kproject.quotes.presentation.screens.components.SimpleAlertDialog
+import com.kproject.quotes.presentation.screens.components.quotes.PostBottomSheet
 import com.kproject.quotes.presentation.theme.PreviewTheme
 
 @Composable
@@ -53,14 +55,29 @@ fun HomeScreen(
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val quotes = homeViewModel.quotes.collectAsLazyPagingItems()
 
+    var showPostBottomSheet by remember { mutableStateOf(false) }
+
     MainContent(
         uiState = uiState,
         quotes = quotes,
         onSearchQueryChange = homeViewModel::onSearchQueryChange,
         onNavigateToUserProfileScreen = onNavigateToUserProfileScreen,
+        onPostQuote = { showPostBottomSheet = true },
         onLogout = {
             homeViewModel.logout()
             onNavigateToLoginScreen.invoke()
+        }
+    )
+
+    PostBottomSheet(
+        showBottomSheet = showPostBottomSheet,
+        onDismiss = { showPostBottomSheet = false },
+        bottomSheetTitle = stringResource(id = R.string.post_quote),
+        bottomSheetButtonTitle = stringResource(id = R.string.post_quote),
+        defaultPostQuote = PostQuote(),
+        quoteInputValidationUseCase = homeViewModel.quoteInputValidationUseCase,
+        onButtonClick = { postQuote ->
+
         }
     )
 }
@@ -72,13 +89,14 @@ private fun MainContent(
     onSearchQueryChange: (String) -> Unit,
     onNavigateToUserProfileScreen: () -> Unit,
     onLogout: () -> Unit,
+    onPostQuote: () -> Unit,
 ) {
     var showLogoutDialog by remember { mutableStateOf(false) }
     var showLogoutConfirmationDialog by remember { mutableStateOf(false) }
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {},
+                onClick = onPostQuote,
                 containerColor = MaterialTheme.colorScheme.secondary,
             ) {
                 Icon(
