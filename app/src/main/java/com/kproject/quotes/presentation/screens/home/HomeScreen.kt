@@ -79,7 +79,7 @@ fun HomeScreen(
         showBottomSheet = showPostBottomSheet,
         onDismiss = { showPostBottomSheet = false },
         bottomSheetTitle = stringResource(id = R.string.post_quote),
-        bottomSheetButtonTitle = stringResource(id = R.string.post_quote),
+        bottomSheetButtonTitle = stringResource(id = R.string.post),
         defaultPostQuote = PostQuote(),
         quoteInputValidationUseCase = homeViewModel.quoteInputValidationUseCase,
         onButtonClick = { postQuote ->

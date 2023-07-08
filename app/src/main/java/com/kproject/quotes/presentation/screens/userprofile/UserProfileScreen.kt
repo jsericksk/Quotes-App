@@ -5,9 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,20 +12,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.kproject.quotes.R
+import com.kproject.quotes.presentation.model.PostQuote
 import com.kproject.quotes.presentation.model.Quote
 import com.kproject.quotes.presentation.screens.components.CenterTopBar
 import com.kproject.quotes.presentation.screens.components.ProgressAlertDialog
-import com.kproject.quotes.presentation.screens.components.quotes.QuotesList
 import com.kproject.quotes.presentation.screens.components.SimpleAlertDialog
+import com.kproject.quotes.presentation.screens.components.quotes.PostBottomSheet
+import com.kproject.quotes.presentation.screens.components.quotes.QuotesList
 import com.kproject.quotes.presentation.utils.Utils
 
 @Composable
@@ -37,18 +33,20 @@ fun UserProfileScreen(
 ) {
     val context = LocalContext.current
     val userProfileViewModel: UserProfileViewModel = hiltViewModel()
-    val uiState by userProfileViewModel.uiState.collectAsStateWithLifecycle()
     val quotes = userProfileViewModel.quotes.collectAsLazyPagingItems()
 
     var quoteToModify: Quote? by remember { mutableStateOf(null) }
     var showDeleteQuoteDialog by remember { mutableStateOf(false) }
     var showDeleteQuoteProgressDialog by remember { mutableStateOf(false) }
 
+    var showPostBottomSheet by remember { mutableStateOf(false) }
+    var showUpdatingQuoteProgressDialog by remember { mutableStateOf(false) }
+
     MainContent(
-        uiState = uiState,
         quotes = quotes,
         onEditQuote = { quote ->
             quoteToModify = quote
+            showPostBottomSheet = true
         },
         onDeleteQuote = { quote ->
             quoteToModify = quote
@@ -68,14 +66,21 @@ fun UserProfileScreen(
                 showDeleteQuoteProgressDialog = true
                 userProfileViewModel.deleteQuote(
                     quote = quoteToDelete,
-                    onResult = { isError ->
+                    onSuccess = {
                         showDeleteQuoteProgressDialog = false
-                        val toastMessage = if (isError) {
-                            context.getString(R.string.error_deleting_quote)
-                        } else {
-                            context.getString(R.string.quote_deleted_successfully)
-                        }
-                        Utils.showToast(context = context, message = toastMessage)
+                        quotes.refresh()
+                        Utils.showToast(
+                            context = context,
+                            message = context.getString(R.string.quote_deleted_successfully)
+                        )
+                    },
+                    onError = {
+                        showDeleteQuoteProgressDialog = false
+                        quotes.refresh()
+                        Utils.showToast(
+                            context = context,
+                            message = context.getString(R.string.error_deleting_quote)
+                        )
                     }
                 )
             }
@@ -86,11 +91,51 @@ fun UserProfileScreen(
         showDialog = showDeleteQuoteProgressDialog,
         title = stringResource(id = R.string.deleting_quote)
     )
+
+    quoteToModify?.let { quoteToUpdate ->
+        PostBottomSheet(
+            showBottomSheet = showPostBottomSheet,
+            onDismiss = { showPostBottomSheet = false },
+            bottomSheetTitle = stringResource(id = R.string.update_quote),
+            bottomSheetButtonTitle = stringResource(id = R.string.update),
+            defaultPostQuote = PostQuote(
+                quote = quoteToUpdate.quote,
+                author = quoteToUpdate.author
+            ),
+            quoteInputValidationUseCase = userProfileViewModel.quoteInputValidationUseCase,
+            onButtonClick = { postQuote ->
+                showUpdatingQuoteProgressDialog = true
+                userProfileViewModel.editQuote(
+                    quoteId = quoteToUpdate.id,
+                    postQuote = postQuote,
+                    onSuccess = {
+                        showUpdatingQuoteProgressDialog = false
+                        quotes.refresh()
+                        Utils.showToast(
+                            context = context,
+                            message = context.getString(R.string.quote_updated_successfully)
+                        )
+                    },
+                    onError = {
+                        showUpdatingQuoteProgressDialog = false
+                        Utils.showToast(
+                            context = context,
+                            message = context.getString(R.string.error_updating_quote)
+                        )
+                    }
+                )
+            }
+        )
+    }
+
+    ProgressAlertDialog(
+        showDialog = showUpdatingQuoteProgressDialog,
+        title = stringResource(id = R.string.updating_quote)
+    )
 }
 
 @Composable
 private fun MainContent(
-    uiState: UserProfileUiState,
     quotes: LazyPagingItems<Quote>,
     onEditQuote: (Quote) -> Unit,
     onDeleteQuote: (Quote) -> Unit,
@@ -103,18 +148,6 @@ private fun MainContent(
                 navigationIcon = Icons.Filled.ArrowBack,
                 navigationIconClick = onNavigateBack
             )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {},
-                containerColor = MaterialTheme.colorScheme.secondary,
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.outline_add_24),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurface
-                )
-            }
         }
     ) { paddingValues ->
         Column(

@@ -10,11 +10,13 @@ import com.kproject.quotes.commom.constants.PrefsConstants
 import com.kproject.quotes.data.fromJson
 import com.kproject.quotes.data.toJson
 import com.kproject.quotes.domain.model.LoggedInUserModel
+import com.kproject.quotes.domain.model.quotes.QuoteModel
 import com.kproject.quotes.domain.repository.QuotesRepository
 import com.kproject.quotes.domain.usecase.preference.GetPreferenceUseCase
+import com.kproject.quotes.domain.usecase.quotes.validation.QuoteInputValidationUseCase
+import com.kproject.quotes.presentation.model.PostQuote
 import com.kproject.quotes.presentation.model.Quote
 import com.kproject.quotes.presentation.model.fromModel
-import com.kproject.quotes.presentation.model.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,11 +28,9 @@ import javax.inject.Inject
 @HiltViewModel
 class UserProfileViewModel @Inject constructor(
     private val quotesRepository: QuotesRepository,
-    private val getPreferenceUseCase: GetPreferenceUseCase
+    private val getPreferenceUseCase: GetPreferenceUseCase,
+    val quoteInputValidationUseCase: QuoteInputValidationUseCase
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(UserProfileUiState())
-    val uiState: StateFlow<UserProfileUiState> get() = _uiState
-
     var quotes: Flow<PagingData<Quote>>
 
     init {
@@ -39,23 +39,33 @@ class UserProfileViewModel @Inject constructor(
             defaultValue = LoggedInUserModel().toJson()
         ).fromJson(LoggedInUserModel::class.java)
         quotes = quotesRepository.getQuotesFromUserId(
-            filter = _uiState.value.searchQuery,
+            filter = "",
             userId = loggedInUserModel.userId
         ).map { pagingDataModel ->
             pagingDataModel.map { quoteModel -> quoteModel.fromModel() }
         }.cachedIn(viewModelScope)
     }
 
-    fun editQuote(quote: Quote, onResult: (error: Boolean) -> Unit) {
+    fun editQuote(
+        quoteId: Int,
+        postQuote: PostQuote,
+        onSuccess: () -> Unit,
+        onError: () -> Unit,
+    ) {
         viewModelScope.launch {
-            val result = quotesRepository.updateById(quote.toModel())
+            val quoteModel = QuoteModel(
+                id = quoteId,
+                quote = postQuote.quote,
+                author = postQuote.author
+            )
+            val result = quotesRepository.updateById(quoteModel)
             result.collect { resultState ->
                 when (resultState) {
                     is ResultState.Success -> {
-                        onResult.invoke(false)
+                        onSuccess.invoke()
                     }
                     is ResultState.Error -> {
-                        onResult.invoke(true)
+                        onError.invoke()
                     }
                     else -> {}
                 }
@@ -63,16 +73,20 @@ class UserProfileViewModel @Inject constructor(
         }
     }
 
-    fun deleteQuote(quote: Quote, onResult: (error: Boolean) -> Unit) {
+    fun deleteQuote(
+        quote: Quote,
+        onSuccess: () -> Unit,
+        onError: () -> Unit
+    ) {
         viewModelScope.launch {
             val result = quotesRepository.deleteById(quote.id)
             result.collect { resultState ->
                 when (resultState) {
                     is ResultState.Success -> {
-                       onResult.invoke(false)
+                        onSuccess.invoke()
                     }
                     is ResultState.Error -> {
-                        onResult.invoke(true)
+                        onError.invoke()
                     }
                     else -> {}
                 }

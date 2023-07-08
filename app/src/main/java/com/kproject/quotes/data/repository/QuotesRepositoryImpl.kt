@@ -92,10 +92,8 @@ class QuotesRepositoryImpl(
                 quoteBody = quoteModel.toBody()
             )
             if (response.isSuccessful) {
-                response.body()?.let {
-                    emit(ResultState.Success())
-                    return@flow
-                }
+                emit(ResultState.Success())
+                return@flow
             }
             emit(ResultState.Error(QuoteException.UnknownError))
         } catch (e: Exception) {
