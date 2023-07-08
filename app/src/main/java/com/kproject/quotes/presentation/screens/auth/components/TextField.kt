@@ -97,12 +97,16 @@ fun TextField(
                 unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(0.6f),
                 focusedBorderColor = Color.Transparent,
                 unfocusedBorderColor = Color.Transparent,
-                errorContainerColor = MaterialTheme.colorScheme.surface.copy(0.5f),
+                errorContainerColor = MaterialTheme.colorScheme.errorContainer.copy(0.5f),
                 errorBorderColor = Color.Transparent,
+                errorCursorColor = MaterialTheme.colorScheme.onSurface.copy(0.6f),
+                errorLeadingIconColor = MaterialTheme.colorScheme.onSurface.copy(0.6f),
+                errorTrailingIconColor = MaterialTheme.colorScheme.onSurface.copy(0.6f),
+                errorLabelColor = MaterialTheme.colorScheme.onSurface.copy(0.6f),
                 selectionColors = TextSelectionColors(
                     handleColor = MaterialTheme.colorScheme.onSurface.copy(0.7f),
                     backgroundColor = MaterialTheme.colorScheme.background
-                )
+                ),
             ),
             modifier = modifier.fillMaxWidth()
         )
