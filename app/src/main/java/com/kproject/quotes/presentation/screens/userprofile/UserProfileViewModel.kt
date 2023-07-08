@@ -19,7 +19,7 @@ import com.kproject.quotes.presentation.model.Quote
 import com.kproject.quotes.presentation.model.fromModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,19 +29,27 @@ class UserProfileViewModel @Inject constructor(
     private val getPreferenceUseCase: GetPreferenceUseCase,
     val quoteInputValidationUseCase: QuoteInputValidationUseCase
 ) : ViewModel() {
-    var quotes: Flow<PagingData<Quote>>
+    private val _quotes = MutableStateFlow<PagingData<Quote>>(PagingData.empty())
+    val quotes: Flow<PagingData<Quote>> = _quotes
 
     init {
-        val loggedInUserModel = getPreferenceUseCase(
-            key = PrefsConstants.LoggedInUserInfo,
-            defaultValue = LoggedInUserModel().toJson()
-        ).fromJson(LoggedInUserModel::class.java)
-        quotes = quotesRepository.getQuotesFromUserId(
-            filter = "",
-            userId = loggedInUserModel.userId
-        ).map { pagingDataModel ->
-            pagingDataModel.map { quoteModel -> quoteModel.fromModel() }
-        }.cachedIn(viewModelScope)
+        getQuotes()
+    }
+
+    private fun getQuotes() {
+        viewModelScope.launch {
+            val loggedInUserModel = getPreferenceUseCase(
+                key = PrefsConstants.LoggedInUserInfo,
+                defaultValue = LoggedInUserModel().toJson()
+            ).fromJson(LoggedInUserModel::class.java)
+            quotesRepository.getQuotesFromUserId(
+                filter = "",
+                userId = loggedInUserModel.userId
+            ).cachedIn(viewModelScope)
+                .collect { pagingDataModel ->
+                    _quotes.value = pagingDataModel.map { quoteModel -> quoteModel.fromModel() }
+                }
+        }
     }
 
     fun editQuote(
