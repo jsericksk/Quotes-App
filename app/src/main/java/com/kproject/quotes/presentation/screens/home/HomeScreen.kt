@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -41,16 +42,19 @@ import com.kproject.quotes.presentation.model.PostQuote
 import com.kproject.quotes.presentation.model.Quote
 import com.kproject.quotes.presentation.screens.components.CustomAlertDialog
 import com.kproject.quotes.presentation.screens.components.CustomSearchBar
+import com.kproject.quotes.presentation.screens.components.ProgressAlertDialog
 import com.kproject.quotes.presentation.screens.components.quotes.QuotesList
 import com.kproject.quotes.presentation.screens.components.SimpleAlertDialog
 import com.kproject.quotes.presentation.screens.components.quotes.PostBottomSheet
 import com.kproject.quotes.presentation.theme.PreviewTheme
+import com.kproject.quotes.presentation.utils.Utils
 
 @Composable
 fun HomeScreen(
     onNavigateToUserProfileScreen: () -> Unit,
     onNavigateToLoginScreen: () -> Unit,
 ) {
+    val context = LocalContext.current
     val homeViewModel: HomeViewModel = hiltViewModel()
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val quotes = homeViewModel.quotes.collectAsLazyPagingItems()
@@ -69,6 +73,8 @@ fun HomeScreen(
         }
     )
 
+    var showPostingQuoteProgressDialog by remember { mutableStateOf(false) }
+
     PostBottomSheet(
         showBottomSheet = showPostBottomSheet,
         onDismiss = { showPostBottomSheet = false },
@@ -77,8 +83,30 @@ fun HomeScreen(
         defaultPostQuote = PostQuote(),
         quoteInputValidationUseCase = homeViewModel.quoteInputValidationUseCase,
         onButtonClick = { postQuote ->
-
+            showPostingQuoteProgressDialog = true
+            homeViewModel.postQuote(
+                postQuote = postQuote,
+                onSuccess = { quote ->
+                    showPostingQuoteProgressDialog = false
+                    Utils.showToast(
+                        context = context,
+                        message = context.getString(R.string.quote_posted_successfully)
+                    )
+                },
+                onError = {
+                    showPostingQuoteProgressDialog = false
+                    Utils.showToast(
+                        context = context,
+                        message = context.getString(R.string.error_posting_quote)
+                    )
+                }
+            )
         }
+    )
+
+    ProgressAlertDialog(
+        showDialog = showPostingQuoteProgressDialog,
+        title = stringResource(id = R.string.posting_quote)
     )
 }
 

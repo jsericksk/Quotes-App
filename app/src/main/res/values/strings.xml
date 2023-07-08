@@ -51,6 +51,15 @@
     <string name="quote_deleted_successfully">Quote deleted successfully.</string>
 
     <string name="post_quote">Post Quote</string>
+    <string name="post">Post</string>
+    <string name="posting_quote">Posting quote. Wait a moment.</string>
+    <string name="quote_posted_successfully">Quote posted successfully.</string>
+    <string name="error_posting_quote">Oops. There was an error trying to post the quote.</string>
+    <string name="update_quote">Update Quote</string>
+    <string name="update">Update</string>
+    <string name="updating_quote">Updating quote. Wait a moment.</string>
+    <string name="quote_updated_successfully">Quote updated successfully.</string>
+    <string name="error_updating_quote">Oops. There was an error trying to update the quote.</string>
     <string name="quote_text">Quote</string>
     <string name="quote_author">Author</string>
     <string name="error_quote_text_invalid">Quote text must be a minimum of 7 characters and a
