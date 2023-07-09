@@ -65,15 +65,18 @@ class HomeViewModel @Inject constructor(
 
     fun searchQuote() {
         viewModelScope.launch {
-            quotesRepository.getAllQuotes(
-                filter = _uiState.value.searchQuery
-            ).cachedIn(viewModelScope).collect { pagingDataModel ->
-                _quotes.value = pagingDataModel.map { quoteModel -> quoteModel.fromModel() }
+            val searchQuery = _uiState.value.searchQuery
+            if (searchQuery.isNotBlank()) {
+                quotesRepository.getAllQuotes(
+                    filter = _uiState.value.searchQuery
+                ).cachedIn(viewModelScope).collect { pagingDataModel ->
+                    _quotes.value = pagingDataModel.map { quoteModel -> quoteModel.fromModel() }
+                }
             }
         }
     }
 
-    fun clearSearch() {
+    fun clearSearchResults() {
         if (_uiState.value.searchQuery.isBlank()) {
             getQuotes()
         }

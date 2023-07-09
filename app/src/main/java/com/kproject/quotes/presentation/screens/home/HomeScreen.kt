@@ -69,7 +69,7 @@ fun HomeScreen(
             homeViewModel.searchQuote()
         },
         onClearSearch = {
-            homeViewModel.clearSearch()
+            homeViewModel.clearSearchResults()
         },
         onNavigateToUserProfileScreen = onNavigateToUserProfileScreen,
         onPostQuote = { showPostBottomSheet = true },
@@ -153,6 +153,11 @@ private fun MainContent(
                 query = uiState.searchQuery,
                 onQueryChange = onSearchQueryChange,
                 onSearch = onSearchQuote,
+                onSearchActive = { isActive ->
+                    if (!isActive) {
+                        // onClearSearch.invoke()
+                    }
+                },
                 trailingIcon = {
                     IconButton(onClick = { showLogoutDialog = true }) {
                         Icon(
@@ -165,13 +170,8 @@ private fun MainContent(
                     }
                 },
                 modifier = Modifier
-                    .padding(paddingValues)
-                    .fillMaxWidth(),
-                onActiveChange = { isActive ->
-                    if (!isActive) {
-                        onClearSearch.invoke()
-                    }
-                }
+                    .padding(12.dp)
+                    .fillMaxWidth()
             )
 
             QuotesList(
