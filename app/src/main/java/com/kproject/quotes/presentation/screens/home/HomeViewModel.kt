@@ -14,7 +14,6 @@ import com.kproject.quotes.domain.model.quotes.QuoteModel
 import com.kproject.quotes.domain.repository.QuotesRepository
 import com.kproject.quotes.domain.usecase.auth.LogoutUseCase
 import com.kproject.quotes.domain.usecase.preference.GetPreferenceUseCase
-import com.kproject.quotes.domain.usecase.preference.IsRefreshTokenExpiredUseCase
 import com.kproject.quotes.domain.usecase.quotes.validation.QuoteInputValidationUseCase
 import com.kproject.quotes.presentation.model.PostQuote
 import com.kproject.quotes.presentation.model.Quote
@@ -22,9 +21,7 @@ import com.kproject.quotes.presentation.model.fromModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -35,7 +32,6 @@ class HomeViewModel @Inject constructor(
     private val getPreferenceUseCase: GetPreferenceUseCase,
     private val logoutUseCase: LogoutUseCase,
     val quoteInputValidationUseCase: QuoteInputValidationUseCase,
-    private val isTokenExpiredUseCase: IsRefreshTokenExpiredUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> get() = _uiState
@@ -43,18 +39,14 @@ class HomeViewModel @Inject constructor(
     private val _quotes = MutableStateFlow<PagingData<Quote>>(PagingData.empty())
     val quotes: Flow<PagingData<Quote>> = _quotes
 
-    val isRefreshTokenExpired: StateFlow<Boolean> = isTokenExpiredUseCase()
-        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
-
-
     init {
         getQuotes()
         getLoggedInUser()
     }
 
-    private fun getQuotes() {
+    private fun getQuotes(searchQuery: String = "") {
         viewModelScope.launch {
-            quotesRepository.getAllQuotes(filter = "").cachedIn(viewModelScope)
+            quotesRepository.getAllQuotes(filter = searchQuery).cachedIn(viewModelScope)
                 .collect { pagingDataModel ->
                     _quotes.value = pagingDataModel.map { quoteModel -> quoteModel.fromModel() }
                 }
@@ -75,11 +67,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             val searchQuery = _uiState.value.searchQuery
             if (searchQuery.isNotBlank()) {
-                quotesRepository.getAllQuotes(
-                    filter = _uiState.value.searchQuery
-                ).cachedIn(viewModelScope).collect { pagingDataModel ->
-                    _quotes.value = pagingDataModel.map { quoteModel -> quoteModel.fromModel() }
-                }
+                getQuotes(searchQuery)
             }
         }
     }
