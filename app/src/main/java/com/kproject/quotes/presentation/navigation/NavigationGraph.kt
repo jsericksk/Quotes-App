@@ -4,6 +4,11 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -18,6 +23,13 @@ import com.kproject.quotes.presentation.screens.userprofile.UserProfileScreen
 @Composable
 fun NavigationGraph(isRefreshTokenExpired: Boolean) {
     val navController = rememberAnimatedNavController()
+
+    var showSessionExpiredDialog by rememberSaveable { mutableStateOf(isRefreshTokenExpired) }
+    LaunchedEffect(isRefreshTokenExpired) {
+        if (isRefreshTokenExpired) {
+            showSessionExpiredDialog = true
+        }
+    }
 
     AnimatedNavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
         composable(route = Screen.LoginScreen.route) {
@@ -92,8 +104,8 @@ fun NavigationGraph(isRefreshTokenExpired: Boolean) {
             )
 
             SessionExpiredAlertDialog(
-                showDialog = isRefreshTokenExpired,
-                onDismiss = {},
+                showDialog = showSessionExpiredDialog,
+                onDismiss = { showSessionExpiredDialog = false },
                 onNavigateToLoginScreen = {
                     navController.navigateWithPopUp(
                         toRoute = Screen.LoginScreen.route,
@@ -126,12 +138,12 @@ fun NavigationGraph(isRefreshTokenExpired: Boolean) {
             )
 
             SessionExpiredAlertDialog(
-                showDialog = isRefreshTokenExpired,
-                onDismiss = {},
+                showDialog = showSessionExpiredDialog,
+                onDismiss = { showSessionExpiredDialog = false },
                 onNavigateToLoginScreen = {
                     navController.navigateWithPopUp(
                         toRoute = Screen.LoginScreen.route,
-                        fromRoute = Screen.UserProfileScreen.route
+                        fromRoute = Screen.HomeScreen.route
                     )
                 }
             )
