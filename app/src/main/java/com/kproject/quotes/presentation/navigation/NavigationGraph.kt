@@ -36,8 +36,8 @@ fun NavigationGraph(isRefreshTokenExpired: Boolean) {
             LoginScreen(
                 onNavigateToHomeScreen = {
                     navController.navigateWithPopUp(
+                        navController = navController,
                         toRoute = Screen.HomeScreen.route,
-                        fromRoute = Screen.LoginScreen.route
                     )
                 },
                 onNavigateToSignUpScreen = {
@@ -65,8 +65,8 @@ fun NavigationGraph(isRefreshTokenExpired: Boolean) {
             SignUpScreen(
                 onNavigateToHomeScreen = {
                     navController.navigateWithPopUp(
+                        navController = navController,
                         toRoute = Screen.HomeScreen.route,
-                        fromRoute = Screen.SignUpScreen.route
                     )
                 },
                 onNavigateBack = {
@@ -97,8 +97,8 @@ fun NavigationGraph(isRefreshTokenExpired: Boolean) {
                 },
                 onNavigateToLoginScreen = {
                     navController.navigateWithPopUp(
+                        navController = navController,
                         toRoute = Screen.LoginScreen.route,
-                        fromRoute = Screen.HomeScreen.route
                     )
                 },
             )
@@ -108,8 +108,8 @@ fun NavigationGraph(isRefreshTokenExpired: Boolean) {
                 onDismiss = { showSessionExpiredDialog = false },
                 onNavigateToLoginScreen = {
                     navController.navigateWithPopUp(
+                        navController = navController,
                         toRoute = Screen.LoginScreen.route,
-                        fromRoute = Screen.HomeScreen.route
                     )
                 }
             )
@@ -142,8 +142,8 @@ fun NavigationGraph(isRefreshTokenExpired: Boolean) {
                 onDismiss = { showSessionExpiredDialog = false },
                 onNavigateToLoginScreen = {
                     navController.navigateWithPopUp(
+                        navController = navController,
                         toRoute = Screen.LoginScreen.route,
-                        fromRoute = Screen.HomeScreen.route
                     )
                 }
             )
@@ -151,9 +151,12 @@ fun NavigationGraph(isRefreshTokenExpired: Boolean) {
     }
 }
 
-private fun NavHostController.navigateWithPopUp(toRoute: String, fromRoute: String) {
+private fun NavHostController.navigateWithPopUp(
+    navController: NavHostController,
+    toRoute: String
+) {
     navigate(toRoute) {
-        popUpTo(fromRoute) {
+        popUpTo(navController.graph.id) {
             inclusive = true
         }
         launchSingleTop = true

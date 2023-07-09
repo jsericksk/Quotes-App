@@ -40,7 +40,6 @@ class DataModule {
     @Provides
     @Singleton
     fun provideCustomOkHttpClient(
-        @ApplicationContext applicationContext: Context,
         tokenManagerRepository: TokenManagerRepository,
         preferenceRepository: PreferenceRepository
     ): OkHttpClient {
