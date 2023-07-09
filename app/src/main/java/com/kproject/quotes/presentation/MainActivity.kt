@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kproject.quotes.presentation.navigation.NavigationGraph
 import com.kproject.quotes.presentation.theme.QuotesTheme
@@ -20,6 +21,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         setContent {
             QuotesTheme {
                 val isRefreshTokenExpired by mainViewModel.isRefreshTokenExpired.collectAsStateWithLifecycle()
@@ -28,8 +30,6 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     NavigationGraph(isRefreshTokenExpired = isRefreshTokenExpired)
-                    // CustomPagination()
-                    // Test()
                 }
             }
         }

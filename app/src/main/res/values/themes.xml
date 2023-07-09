@@ -2,4 +2,11 @@
 <resources>
 
     <style name="Theme.Quotes" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#1F1F1F</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.Quotes</item>
+    </style>
+
 </resources>
