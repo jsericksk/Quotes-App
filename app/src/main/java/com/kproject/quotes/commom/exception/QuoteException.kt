@@ -4,6 +4,5 @@ sealed class QuoteException : BaseException() {
     object NoQuoteFound : QuoteException()
     object UserWithoutPosts : QuoteException()
     object QuoteDoesNotExist : QuoteException()
-    object RefreshTokenExpired : QuoteException()
     object UnknownError : QuoteException()
 }
