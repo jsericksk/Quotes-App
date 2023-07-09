@@ -4,16 +4,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kproject.quotes.domain.usecase.preference.IsRefreshTokenExpiredUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val isTokenExpiredUseCase: IsRefreshTokenExpiredUseCase,
+    private val isRefreshTokenExpiredUseCase: IsRefreshTokenExpiredUseCase,
 ) : ViewModel() {
+    private val _isRefreshTokenExpired = MutableStateFlow(false)
+    val isRefreshTokenExpired: StateFlow<Boolean> = _isRefreshTokenExpired
 
-    val isRefreshTokenExpired: StateFlow<Boolean> = isTokenExpiredUseCase()
-        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
+    init {
+        viewModelScope.launch {
+            isRefreshTokenExpiredUseCase().collectLatest { isExpired ->
+                _isRefreshTokenExpired.value = isExpired
+            }
+        }
+    }
 }

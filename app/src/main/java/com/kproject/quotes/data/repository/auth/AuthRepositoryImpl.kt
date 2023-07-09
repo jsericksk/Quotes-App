@@ -90,7 +90,7 @@ class AuthRepositoryImpl(
         }
     }
 
-    private fun saveUserInfo(accessToken: String) {
+    private suspend fun saveUserInfo(accessToken: String) {
         try {
             val jwt = JWT(accessToken)
             val userId = jwt.getClaim("uid").asInt()!!
@@ -109,10 +109,7 @@ class AuthRepositoryImpl(
                 key = PrefsConstants.LoggedInUserInfo,
                 value = loggedInUserModel.toJson()
             )
-            preferenceRepository.savePreference(
-                key = PrefsConstants.RefreshTokenExpired,
-                value = false
-            )
+            tokenManagerRepository.changeRefreshTokenExpiredState(isExpired = false)
         } catch (e: Exception) {
             e.printStackTrace()
         }

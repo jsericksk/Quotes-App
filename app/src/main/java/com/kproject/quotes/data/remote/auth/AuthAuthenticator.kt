@@ -9,6 +9,7 @@ import com.kproject.quotes.data.repository.auth.TokenManagerRepository
 import com.kproject.quotes.data.toJson
 import com.kproject.quotes.domain.model.LoggedInUserModel
 import com.kproject.quotes.domain.repository.PreferenceRepository
+import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
@@ -56,5 +57,8 @@ class AuthAuthenticator(
             PrefsConstants.LoggedInUserInfo,
             LoggedInUserModel().toJson()
         )
+        runBlocking {
+            tokenManagerRepository.changeRefreshTokenExpiredState(isExpired = true)
+        }
     }
 }
