@@ -1,16 +1,16 @@
 package com.kproject.quotes.domain.usecase.auth.validation
 
-import com.kproject.quotes.commom.exception.ValidationState
+import com.kproject.quotes.commom.validation.AuthValidationState
 
 class ValidateUsernameUseCaseImpl : ValidateUsernameUseCase {
 
-    override fun invoke(username: String): ValidationState {
+    override fun invoke(username: String): AuthValidationState {
         if (username.isBlank()) {
-            return ValidationState.EmptyUsername
+            return AuthValidationState.EmptyUsername
         }
         if (username.length < 3 || username.length > 50) {
-            return ValidationState.InvalidUsername
+            return AuthValidationState.InvalidUsername
         }
-        return ValidationState.Success
+        return AuthValidationState.Success
     }
 }

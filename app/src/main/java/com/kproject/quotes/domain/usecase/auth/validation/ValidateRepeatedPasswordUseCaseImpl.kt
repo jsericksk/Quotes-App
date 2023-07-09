@@ -1,13 +1,13 @@
 package com.kproject.quotes.domain.usecase.auth.validation
 
-import com.kproject.quotes.commom.exception.ValidationState
+import com.kproject.quotes.commom.validation.AuthValidationState
 
 class ValidateRepeatedPasswordUseCaseImpl : ValidateRepeatedPasswordUseCase {
 
-    override fun invoke(password: String, repeatedPassword: String): ValidationState {
+    override fun invoke(password: String, repeatedPassword: String): AuthValidationState {
         if (repeatedPassword != password) {
-            return ValidationState.RepeatedPasswordDoesNotMatch
+            return AuthValidationState.RepeatedPasswordDoesNotMatch
         }
-        return ValidationState.Success
+        return AuthValidationState.Success
     }
 }

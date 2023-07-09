@@ -1,18 +1,18 @@
 package com.kproject.quotes.domain.usecase.auth.validation
 
-import com.kproject.quotes.commom.exception.ValidationState
+import com.kproject.quotes.commom.validation.AuthValidationState
 
 class ValidateEmailUseCaseImpl(
     private val emailValidator: EmailValidator
 ) : ValidateEmailUseCase {
 
-    override fun invoke(email: String): ValidationState {
+    override fun invoke(email: String): AuthValidationState {
         if (email.isBlank()) {
-            return ValidationState.EmptyEmail
+            return AuthValidationState.EmptyEmail
         }
         if (!emailValidator.isValidEmail(email)) {
-            return ValidationState.InvalidEmail
+            return AuthValidationState.InvalidEmail
         }
-        return ValidationState.Success
+        return AuthValidationState.Success
     }
 }

@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kproject.quotes.commom.ResultState
 import com.kproject.quotes.commom.constants.PrefsConstants
-import com.kproject.quotes.commom.exception.ValidationState
+import com.kproject.quotes.commom.validation.AuthValidationState
 import com.kproject.quotes.domain.usecase.auth.LoginUseCase
 import com.kproject.quotes.domain.usecase.auth.validation.ValidateEmailUseCase
 import com.kproject.quotes.domain.usecase.auth.validation.ValidatePasswordUseCase
@@ -95,7 +95,7 @@ class LoginViewModel @Inject constructor(
             emailValidationState,
             passwordValidationState
         ).any { validationState ->
-            validationState != ValidationState.Success
+            validationState != AuthValidationState.Success
         }
 
         return hasError

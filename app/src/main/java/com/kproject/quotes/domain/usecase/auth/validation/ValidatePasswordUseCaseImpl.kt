@@ -1,16 +1,16 @@
 package com.kproject.quotes.domain.usecase.auth.validation
 
-import com.kproject.quotes.commom.exception.ValidationState
+import com.kproject.quotes.commom.validation.AuthValidationState
 
 class ValidatePasswordUseCaseImpl : ValidatePasswordUseCase {
 
-    override fun invoke(password: String): ValidationState {
+    override fun invoke(password: String): AuthValidationState {
         if (password.isBlank()) {
-            return ValidationState.EmptyPassword
+            return AuthValidationState.EmptyPassword
         }
         if (password.length < 6) {
-            return ValidationState.PasswordTooShort
+            return AuthValidationState.PasswordTooShort
         }
-        return ValidationState.Success
+        return AuthValidationState.Success
     }
 }

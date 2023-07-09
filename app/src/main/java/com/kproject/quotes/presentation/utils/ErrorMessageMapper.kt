@@ -4,18 +4,18 @@ import com.kproject.quotes.R
 import com.kproject.quotes.commom.exception.AuthException
 import com.kproject.quotes.commom.exception.BaseException
 import com.kproject.quotes.commom.exception.QuoteException
-import com.kproject.quotes.commom.exception.ValidationState
+import com.kproject.quotes.commom.validation.AuthValidationState
 import com.kproject.quotes.commom.validation.QuoteValidationState
 
-fun ValidationState.toErrorMessage(): UiText {
+fun AuthValidationState.toErrorMessage(): UiText {
     return when (this) {
-        ValidationState.EmptyEmail -> UiText.StringResource(R.string.error_empty_email)
-        ValidationState.InvalidEmail -> UiText.StringResource(R.string.error_email_badly_formatted)
-        ValidationState.EmptyPassword -> UiText.StringResource(R.string.error_empty_password)
-        ValidationState.PasswordTooShort -> UiText.StringResource(R.string.error_password_too_short)
-        ValidationState.RepeatedPasswordDoesNotMatch -> UiText.StringResource(R.string.error_passwords_does_not_match)
-        ValidationState.EmptyUsername -> UiText.StringResource(R.string.error_username_empty)
-        ValidationState.InvalidUsername -> UiText.StringResource(R.string.error_invalid_username)
+        AuthValidationState.EmptyEmail -> UiText.StringResource(R.string.error_empty_email)
+        AuthValidationState.InvalidEmail -> UiText.StringResource(R.string.error_email_badly_formatted)
+        AuthValidationState.EmptyPassword -> UiText.StringResource(R.string.error_empty_password)
+        AuthValidationState.PasswordTooShort -> UiText.StringResource(R.string.error_password_too_short)
+        AuthValidationState.RepeatedPasswordDoesNotMatch -> UiText.StringResource(R.string.error_passwords_does_not_match)
+        AuthValidationState.EmptyUsername -> UiText.StringResource(R.string.error_username_empty)
+        AuthValidationState.InvalidUsername -> UiText.StringResource(R.string.error_invalid_username)
         else -> UiText.HardcodedString("")
     }
 }
