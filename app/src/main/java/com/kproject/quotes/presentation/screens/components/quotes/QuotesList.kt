@@ -231,7 +231,11 @@ private fun QuotesListItem(
                         tint = MaterialTheme.colorScheme.onSurface
                     )
                     Spacer(Modifier.width(6.dp))
-                    Column {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    ) {
                         Text(
                             text = quote.postedByUsername,
                             color = MaterialTheme.colorScheme.onSurface,
@@ -247,12 +251,6 @@ private fun QuotesListItem(
                             overflow = TextOverflow.Ellipsis
                         )
                     }
-
-                    Spacer(
-                        Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                    )
 
                     QuoteCardActionButtons(quote = quote)
                 }
