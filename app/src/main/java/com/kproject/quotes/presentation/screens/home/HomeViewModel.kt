@@ -19,7 +19,6 @@ import com.kproject.quotes.presentation.model.PostQuote
 import com.kproject.quotes.presentation.model.Quote
 import com.kproject.quotes.presentation.model.fromModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -37,7 +36,7 @@ class HomeViewModel @Inject constructor(
     val uiState: StateFlow<HomeUiState> get() = _uiState
 
     private val _quotes = MutableStateFlow<PagingData<Quote>>(PagingData.empty())
-    val quotes: Flow<PagingData<Quote>> = _quotes
+    val quotes: StateFlow<PagingData<Quote>> = _quotes
 
     init {
         getQuotes()
