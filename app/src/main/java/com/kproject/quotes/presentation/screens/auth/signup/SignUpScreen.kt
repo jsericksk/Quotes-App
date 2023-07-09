@@ -68,6 +68,7 @@ fun SignUpScreen(
         onDismiss = {
             signUpViewModel.onUiEvent(SignUpUiEvent.OnDismissErrorDialog)
         },
+        iconResId = R.drawable.outline_error_outline_24,
         title = stringResource(id = R.string.error),
         message = uiState.signUpErrorMessage.asString(),
         showButtonCancel = false,

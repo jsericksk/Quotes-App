@@ -41,35 +41,37 @@ fun LoginScreen(
     val uiState = loginViewModel.uiState
     val isUserLoggedIn = uiState.isUserLoggedIn
 
-    // TODO: Corrigir problema de renderizar tela sem abrir HomeScreen
     LaunchedEffect(isUserLoggedIn) {
         if (isUserLoggedIn) {
             onNavigateToHomeScreen.invoke()
         }
     }
 
-    MainContent(
-        onNavigateToSignUpScreen = onNavigateToSignUpScreen,
-        uiState = uiState,
-        onUiEvent = loginViewModel::onUiEvent,
-        onLoginButtonClick = {
-            loginViewModel.login()
-        }
-    )
+    if (!isUserLoggedIn) {
+        MainContent(
+            onNavigateToSignUpScreen = onNavigateToSignUpScreen,
+            uiState = uiState,
+            onUiEvent = loginViewModel::onUiEvent,
+            onLoginButtonClick = {
+                loginViewModel.login()
+            }
+        )
 
-    ProgressAlertDialog(showDialog = uiState.isLoading)
+        ProgressAlertDialog(showDialog = uiState.isLoading)
 
-    SimpleAlertDialog(
-        showDialog = uiState.loginError,
-        onDismiss = {
-            loginViewModel.onUiEvent(LoginUiEvent.OnDismissErrorDialog)
-        },
-        title = stringResource(id = R.string.error),
-        message = uiState.loginErrorMessage.asString(),
-        showButtonCancel = false,
-        cancelable = false,
-        onClickButtonOk = {}
-    )
+        SimpleAlertDialog(
+            showDialog = uiState.loginError,
+            onDismiss = {
+                loginViewModel.onUiEvent(LoginUiEvent.OnDismissErrorDialog)
+            },
+            iconResId = R.drawable.outline_error_outline_24,
+            title = stringResource(id = R.string.error),
+            message = uiState.loginErrorMessage.asString(),
+            showButtonCancel = false,
+            cancelable = false,
+            onClickButtonOk = {}
+        )
+    }
 }
 
 @Composable

@@ -39,7 +39,7 @@
     <string name="no_quote_found_in_search">No quote found</string>
     <string name="quote_does_not_exist">Quote does not exist</string>
     <string name="my_quotes">My Quotes</string>
-    <string name="user_without_posts">You haven\'t published any quotes yet. Why not publish one now?</string>
+    <string name="user_without_posts">You haven\'t published any quotes yet.</string>
     <string name="logout">Logout</string>
     <string name="logout_confirmation">Are you sure you want to logout?</string>
 
