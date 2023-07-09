@@ -35,7 +35,7 @@ fun NavigationGraph(isRefreshTokenExpired: Boolean) {
         composable(route = Screen.LoginScreen.route) {
             LoginScreen(
                 onNavigateToHomeScreen = {
-                    navController.navigateWithPopUp(
+                    navController.navigateAndClearBackStack(
                         navController = navController,
                         toRoute = Screen.HomeScreen.route,
                     )
@@ -64,7 +64,7 @@ fun NavigationGraph(isRefreshTokenExpired: Boolean) {
         ) {
             SignUpScreen(
                 onNavigateToHomeScreen = {
-                    navController.navigateWithPopUp(
+                    navController.navigateAndClearBackStack(
                         navController = navController,
                         toRoute = Screen.HomeScreen.route,
                     )
@@ -96,7 +96,7 @@ fun NavigationGraph(isRefreshTokenExpired: Boolean) {
                     navController.navigate(Screen.UserProfileScreen.route)
                 },
                 onNavigateToLoginScreen = {
-                    navController.navigateWithPopUp(
+                    navController.navigateAndClearBackStack(
                         navController = navController,
                         toRoute = Screen.LoginScreen.route,
                     )
@@ -107,7 +107,7 @@ fun NavigationGraph(isRefreshTokenExpired: Boolean) {
                 showDialog = showSessionExpiredDialog,
                 onDismiss = { showSessionExpiredDialog = false },
                 onNavigateToLoginScreen = {
-                    navController.navigateWithPopUp(
+                    navController.navigateAndClearBackStack(
                         navController = navController,
                         toRoute = Screen.LoginScreen.route,
                     )
@@ -141,7 +141,7 @@ fun NavigationGraph(isRefreshTokenExpired: Boolean) {
                 showDialog = showSessionExpiredDialog,
                 onDismiss = { showSessionExpiredDialog = false },
                 onNavigateToLoginScreen = {
-                    navController.navigateWithPopUp(
+                    navController.navigateAndClearBackStack(
                         navController = navController,
                         toRoute = Screen.LoginScreen.route,
                     )
@@ -151,7 +151,7 @@ fun NavigationGraph(isRefreshTokenExpired: Boolean) {
     }
 }
 
-private fun NavHostController.navigateWithPopUp(
+private fun NavHostController.navigateAndClearBackStack(
     navController: NavHostController,
     toRoute: String
 ) {
