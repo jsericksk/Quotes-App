@@ -4,7 +4,11 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.text.format.DateFormat
 import android.widget.Toast
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 object Utils {
 
@@ -27,5 +31,13 @@ object Utils {
         )
         intent.type = "text/plain"
         context.startActivity(intent)
+    }
+
+    fun getFormattedDate(date: Date): String {
+        val localizedDateFormat = DateFormat.getBestDateTimePattern(
+            Locale.getDefault(),
+            "dd/MM/yyyy"
+        )
+        return SimpleDateFormat(localizedDateFormat, Locale.getDefault()).format(date)
     }
 }

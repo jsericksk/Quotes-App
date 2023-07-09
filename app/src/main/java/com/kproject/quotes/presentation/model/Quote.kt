@@ -1,9 +1,8 @@
 package com.kproject.quotes.presentation.model
 
 import com.kproject.quotes.domain.model.quotes.QuoteModel
-import java.text.SimpleDateFormat
+import com.kproject.quotes.presentation.utils.Utils
 import java.util.Date
-import java.util.Locale
 
 data class Quote(
     val id: Int,
@@ -13,7 +12,7 @@ data class Quote(
     val postedByUserId: Int,
     val publicationDate: Date
 ) {
-    val formattedDate = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(publicationDate)
+    val formattedDate = Utils.getFormattedDate(publicationDate)
 }
 
 val fakeQuotesList = (0..20).map { index ->

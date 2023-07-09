@@ -96,7 +96,9 @@ fun QuotesList(
                         quoteException.toQuoteErrorMessage()
                     }
                     val showRetryButton = remember(quoteException) {
-                        quoteException != QuoteException.UserWithoutPosts
+                        val isNotEmptyQuotes = (quoteException != QuoteException.UserWithoutPosts
+                                && quoteException != QuoteException.NoQuoteFound)
+                        isNotEmptyQuotes
                     }
                     val infoIconResId = remember(quoteException) {
                         if (quoteException == QuoteException.UserWithoutPosts) {
@@ -178,7 +180,7 @@ private fun QuotesListItem(
 ) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF0F202E)
+            containerColor = Color(0xFF252525)
         ),
         shape = MaterialTheme.shapes.medium,
         modifier = modifier
@@ -199,12 +201,11 @@ private fun QuotesListItem(
             ) {
                 Column {
                     Text(
-                        text = "\" " + quote.quote,
+                        text = "“ " + quote.quote,
                         color = MaterialTheme.colorScheme.onSurface,
                         fontFamily = FontFamily.SansSerif,
-                        fontSize = 16.sp,
+                        fontSize = 17.sp,
                         fontWeight = FontWeight.Bold,
-                        maxLines = 8,
                         overflow = TextOverflow.Ellipsis,
                         textAlign = TextAlign.Center
                     )
