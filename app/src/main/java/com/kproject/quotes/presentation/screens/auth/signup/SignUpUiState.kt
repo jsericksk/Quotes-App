@@ -13,8 +13,8 @@ data class SignUpUiState(
     val repeatedPassword: String = "",
     val repeatedPasswordError: UiText = UiText.HardcodedString(""),
     val isLoading: Boolean = false,
-    val signUpError: Boolean = false,
-    val signUpErrorMessage: UiText = UiText.HardcodedString(""),
+    val signUpOrAutoLoginError: Boolean = false,
+    val signUpOrAutoLoginErrorMessage: UiText = UiText.HardcodedString(""),
     val validateFieldsWhenTyping: Boolean = false
 )
 

@@ -64,13 +64,13 @@ fun SignUpScreen(
     ProgressAlertDialog(showDialog = uiState.isLoading)
 
     SimpleAlertDialog(
-        showDialog = uiState.signUpError,
+        showDialog = uiState.signUpOrAutoLoginError,
         onDismiss = {
             signUpViewModel.onUiEvent(SignUpUiEvent.OnDismissErrorDialog)
         },
         iconResId = R.drawable.outline_error_outline_24,
         title = stringResource(id = R.string.error),
-        message = uiState.signUpErrorMessage.asString(),
+        message = uiState.signUpOrAutoLoginErrorMessage.asString(),
         showButtonCancel = false,
         cancelable = false,
         onClickButtonOk = {},

@@ -56,9 +56,8 @@ class SignUpViewModel @Inject constructor(
                 validateFieldsWhenTyping()
             }
             is SignUpUiEvent.OnDismissErrorDialog -> {
-                uiState = uiState.copy(signUpError = false)
+                uiState = uiState.copy(signUpOrAutoLoginError = false)
             }
-            else -> {}
         }
     }
 
@@ -81,12 +80,11 @@ class SignUpViewModel @Inject constructor(
                             result.exception?.let { exception ->
                                 uiState = uiState.copy(
                                     isLoading = false,
-                                    signUpError = true,
-                                    signUpErrorMessage = exception.toAuthErrorMessage()
+                                    signUpOrAutoLoginError = true,
+                                    signUpOrAutoLoginErrorMessage = exception.toAuthErrorMessage()
                                 )
                             }
                         }
-                        else -> {}
                     }
                 }
             }
@@ -105,8 +103,8 @@ class SignUpViewModel @Inject constructor(
                     is ResultState.Error -> {
                         uiState = uiState.copy(
                             isLoading = false,
-                            signUpError = true,
-                            signUpErrorMessage = UiText.StringResource(R.string.error_when_trying_to_auto_login)
+                            signUpOrAutoLoginError = true,
+                            signUpOrAutoLoginErrorMessage = UiText.StringResource(R.string.error_when_trying_to_auto_login)
                         )
                     }
                     else -> {}
