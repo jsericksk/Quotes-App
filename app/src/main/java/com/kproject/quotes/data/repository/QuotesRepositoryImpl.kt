@@ -57,6 +57,10 @@ class QuotesRepositoryImpl(
                     emit(ResultState.Success(quoteModel))
                 } ?: emit(ResultState.Error(QuoteException.UnknownError))
             } else {
+                if (response.code() == 401) {
+                    emit(ResultState.Error(QuoteException.RefreshTokenExpired))
+                    return@flow
+                }
                 if (response.code() == 404) {
                     emit(ResultState.Error(QuoteException.QuoteDoesNotExist))
                     return@flow
@@ -77,6 +81,11 @@ class QuotesRepositoryImpl(
                     emit(ResultState.Success(quoteResponse.toQuoteModel()))
                 } ?: emit(ResultState.Error(QuoteException.UnknownError))
                 return@flow
+            } else {
+                if (response.code() == 401) {
+                    emit(ResultState.Error(QuoteException.RefreshTokenExpired))
+                    return@flow
+                }
             }
             emit(ResultState.Error(QuoteException.UnknownError))
         } catch (e: Exception) {
@@ -94,6 +103,11 @@ class QuotesRepositoryImpl(
             if (response.isSuccessful) {
                 emit(ResultState.Success())
                 return@flow
+            } else {
+                if (response.code() == 401) {
+                    emit(ResultState.Error(QuoteException.RefreshTokenExpired))
+                    return@flow
+                }
             }
             emit(ResultState.Error(QuoteException.UnknownError))
         } catch (e: Exception) {
@@ -108,6 +122,11 @@ class QuotesRepositoryImpl(
             if (response.isSuccessful) {
                 emit(ResultState.Success())
                 return@flow
+            } else {
+                if (response.code() == 401) {
+                    emit(ResultState.Error(QuoteException.RefreshTokenExpired))
+                    return@flow
+                }
             }
             emit(ResultState.Error(QuoteException.UnknownError))
         } catch (e: Exception) {

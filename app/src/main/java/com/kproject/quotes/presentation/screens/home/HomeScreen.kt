@@ -43,9 +43,9 @@ import com.kproject.quotes.presentation.model.Quote
 import com.kproject.quotes.presentation.screens.components.CustomAlertDialog
 import com.kproject.quotes.presentation.screens.components.CustomSearchBar
 import com.kproject.quotes.presentation.screens.components.ProgressAlertDialog
-import com.kproject.quotes.presentation.screens.components.quotes.QuotesList
 import com.kproject.quotes.presentation.screens.components.SimpleAlertDialog
 import com.kproject.quotes.presentation.screens.components.quotes.PostBottomSheet
+import com.kproject.quotes.presentation.screens.components.quotes.QuotesList
 import com.kproject.quotes.presentation.theme.PreviewTheme
 import com.kproject.quotes.presentation.utils.Utils
 
@@ -176,7 +176,7 @@ private fun MainContent(
 
             QuotesList(
                 quotes = quotes,
-                showActionOptions = false
+                showActionOptions = false,
             )
         }
 

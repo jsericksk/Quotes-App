@@ -2,6 +2,8 @@ package com.kproject.quotes.presentation.di
 
 import com.kproject.quotes.domain.usecase.preference.GetPreferenceUseCase
 import com.kproject.quotes.domain.usecase.preference.GetPreferenceUseCaseImpl
+import com.kproject.quotes.domain.usecase.preference.IsRefreshTokenExpiredUseCase
+import com.kproject.quotes.domain.usecase.preference.IsRefreshTokenExpiredUseCaseImpl
 import com.kproject.quotes.domain.usecase.preference.SavePreferenceUseCase
 import com.kproject.quotes.domain.usecase.preference.SavePreferenceUseCaseImpl
 import dagger.Binds
@@ -22,4 +24,9 @@ abstract class PreferencesDomainModule {
     abstract fun bindSavePreferenceUseCase(
         savePreferenceUseCaseImpl: SavePreferenceUseCaseImpl
     ): SavePreferenceUseCase
+
+    @Binds
+    abstract fun bindIsTokenExpiredUseCase(
+        isTokenExpiredUseCaseImpl: IsRefreshTokenExpiredUseCaseImpl
+    ): IsRefreshTokenExpiredUseCase
 }

@@ -3,8 +3,13 @@ package com.kproject.quotes.data.repository
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import com.kproject.quotes.commom.constants.PrefsConstants
 import com.kproject.quotes.domain.repository.PreferenceRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.callbackFlow
 
 private const val PrefsName = "settings"
 
@@ -43,4 +48,17 @@ class PreferenceRepositoryImpl(
             else -> throw UnsupportedOperationException("Type provided as defaultValue not supported")
         }
     }
+
+    override fun isRefreshTokenExpired() = callbackFlow<Boolean> {
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            if (key == PrefsConstants.RefreshTokenExpired) {
+                trySend(prefs.getBoolean(key, false))
+            }
+        }
+        prefs.registerOnSharedPreferenceChangeListener(listener)
+        if (prefs.contains(PrefsConstants.RefreshTokenExpired)) {
+            send(prefs.getBoolean(PrefsConstants.RefreshTokenExpired, false))
+        }
+        awaitClose { prefs.unregisterOnSharedPreferenceChangeListener(listener) }
+    }.buffer(Channel.UNLIMITED)
 }

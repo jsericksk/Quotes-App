@@ -67,5 +67,10 @@
     <string name="error_quote_author_invalid">Quote author must be a minimum of 1 character and
         a maximum of 80</string>
 
+    <string name="expired_login_session">Session Expired</string>
+    <string name="expired_login_session_message">You\'ve gone too long without accessing the app.
+        Unfortunately your section has expired. You need to login again.</string>
+
+
 
 </resources>

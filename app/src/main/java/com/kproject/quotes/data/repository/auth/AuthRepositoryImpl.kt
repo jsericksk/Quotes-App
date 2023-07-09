@@ -109,6 +109,10 @@ class AuthRepositoryImpl(
                 key = PrefsConstants.LoggedInUserInfo,
                 value = loggedInUserModel.toJson()
             )
+            preferenceRepository.savePreference(
+                key = PrefsConstants.RefreshTokenExpired,
+                value = false
+            )
         } catch (e: Exception) {
             e.printStackTrace()
         }

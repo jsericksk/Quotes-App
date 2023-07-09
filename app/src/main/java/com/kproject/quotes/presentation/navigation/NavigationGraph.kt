@@ -10,12 +10,13 @@ import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.kproject.quotes.presentation.screens.auth.login.LoginScreen
 import com.kproject.quotes.presentation.screens.auth.signup.SignUpScreen
+import com.kproject.quotes.presentation.screens.components.quotes.SessionExpiredAlertDialog
 import com.kproject.quotes.presentation.screens.home.HomeScreen
 import com.kproject.quotes.presentation.screens.userprofile.UserProfileScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun NavigationGraph() {
+fun NavigationGraph(isRefreshTokenExpired: Boolean) {
     val navController = rememberAnimatedNavController()
 
     AnimatedNavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
@@ -89,6 +90,17 @@ fun NavigationGraph() {
                     )
                 },
             )
+
+            SessionExpiredAlertDialog(
+                showDialog = isRefreshTokenExpired,
+                onDismiss = {},
+                onNavigateToLoginScreen = {
+                    navController.navigateWithPopUp(
+                        toRoute = Screen.LoginScreen.route,
+                        fromRoute = Screen.HomeScreen.route
+                    )
+                }
+            )
         }
 
         // UserProfileScreen
@@ -110,6 +122,17 @@ fun NavigationGraph() {
             UserProfileScreen(
                 onNavigateBack = {
                     navController.popBackStack()
+                },
+            )
+
+            SessionExpiredAlertDialog(
+                showDialog = isRefreshTokenExpired,
+                onDismiss = {},
+                onNavigateToLoginScreen = {
+                    navController.navigateWithPopUp(
+                        toRoute = Screen.LoginScreen.route,
+                        fromRoute = Screen.UserProfileScreen.route
+                    )
                 }
             )
         }

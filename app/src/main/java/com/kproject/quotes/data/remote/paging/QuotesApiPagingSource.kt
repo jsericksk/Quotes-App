@@ -43,6 +43,9 @@ class QuotesApiPagingSource(
                     )
                 }
             } else {
+                if (response.code() == 401) {
+                    return LoadResult.Error(QuoteException.RefreshTokenExpired)
+                }
                 if (response.code() == 404) {
                     val errorResponse = response.errorBody().toErrorResponse()
                     errorResponse?.let { error ->
@@ -58,6 +61,7 @@ class QuotesApiPagingSource(
                     }
                     return LoadResult.Error(QuoteException.UnknownError)
                 }
+                Log.d("Authenticator", "Error boddy: ${response.errorBody().toErrorResponse()}")
             }
             LoadResult.Error(QuoteException.UnknownError)
         } catch (e: Exception) {

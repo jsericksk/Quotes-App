@@ -39,9 +39,16 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideCustomOkHttpClient(tokenManagerRepository: TokenManagerRepository): OkHttpClient {
+    fun provideCustomOkHttpClient(
+        @ApplicationContext applicationContext: Context,
+        tokenManagerRepository: TokenManagerRepository,
+        preferenceRepository: PreferenceRepository
+    ): OkHttpClient {
         val authInterceptor = AuthInterceptor(tokenManagerRepository)
-        val authAuthenticator = AuthAuthenticator(tokenManagerRepository)
+        val authAuthenticator = AuthAuthenticator(
+            tokenManagerRepository,
+            preferenceRepository
+        )
         return OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
             .authenticator(authAuthenticator)

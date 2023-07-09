@@ -29,7 +29,7 @@ import com.kproject.quotes.presentation.utils.Utils
 
 @Composable
 fun UserProfileScreen(
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
 ) {
     val context = LocalContext.current
     val userProfileViewModel: UserProfileViewModel = hiltViewModel()
@@ -52,7 +52,7 @@ fun UserProfileScreen(
             quoteToModify = quote
             showDeleteQuoteDialog = true
         },
-        onNavigateBack = onNavigateBack
+        onNavigateBack = onNavigateBack,
     )
 
     SimpleAlertDialog(
@@ -139,7 +139,7 @@ private fun MainContent(
     quotes: LazyPagingItems<Quote>,
     onEditQuote: (Quote) -> Unit,
     onDeleteQuote: (Quote) -> Unit,
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
 ) {
     Scaffold(
         topBar = {
