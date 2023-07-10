@@ -1,5 +1,6 @@
 package com.kproject.quotes.presentation.screens.components.quotes
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,6 +26,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
+import androidx.compose.material3.MenuItemColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -46,6 +49,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.PopupProperties
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.kproject.quotes.R
@@ -311,7 +315,8 @@ private fun ActionOptions(
 ) {
     DropdownMenu(
         expanded = showOptions,
-        onDismissRequest = onDismiss
+        onDismissRequest = onDismiss,
+        modifier = Modifier.background(MaterialTheme.colorScheme.surface)
     ) {
         DropdownMenuItem(
             onClick = {
@@ -330,7 +335,7 @@ private fun ActionOptions(
                     text = stringResource(id = R.string.edit_quote),
                     color = MaterialTheme.colorScheme.onSurface
                 )
-            }
+            },
         )
 
         DropdownMenuItem(
@@ -350,7 +355,7 @@ private fun ActionOptions(
                     text = stringResource(id = R.string.delete_quote),
                     color = MaterialTheme.colorScheme.onSurface
                 )
-            }
+            },
         )
     }
 }

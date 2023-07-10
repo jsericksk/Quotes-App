@@ -137,7 +137,7 @@ fun CustomAlertDialog(
                 Column(
                     modifier = Modifier
                         .background(
-                            color = MaterialTheme.colorScheme.primaryContainer,
+                            color = MaterialTheme.colorScheme.surface,
                             shape = shape
                         )
                         .padding(

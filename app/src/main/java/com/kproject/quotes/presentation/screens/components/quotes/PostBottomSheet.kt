@@ -52,7 +52,7 @@ fun PostBottomSheet(
         ModalBottomSheet(
             sheetState = bottomSheetState,
             onDismissRequest = onDismiss,
-            containerColor = MaterialTheme.colorScheme.primaryContainer
+            containerColor = MaterialTheme.colorScheme.surface
         ) {
             Column(
                 modifier = Modifier.padding(
@@ -161,8 +161,8 @@ private fun TextField(
                 unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurface.copy(0.7f),
                 focusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(0.8f),
                 unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(0.6f),
-                focusedBorderColor = MaterialTheme.colorScheme.surface,
-                unfocusedBorderColor = MaterialTheme.colorScheme.surface.copy(0.7f),
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(0.7f),
                 errorContainerColor = Color.Transparent,
                 errorBorderColor = MaterialTheme.colorScheme.errorContainer.copy(0.7f),
                 errorLabelColor = MaterialTheme.colorScheme.errorContainer,

@@ -9,7 +9,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kproject.quotes.presentation.theme.PreviewTheme
@@ -26,7 +25,7 @@ fun AuthButton(
         shape = MaterialTheme.shapes.small,
         contentPadding = PaddingValues(16.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF2E2E2E)
+            containerColor = MaterialTheme.colorScheme.secondary
         ),
         modifier = modifier.fillMaxWidth()
     ) {

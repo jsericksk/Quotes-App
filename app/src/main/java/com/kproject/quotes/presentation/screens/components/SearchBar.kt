@@ -130,9 +130,9 @@ fun CustomSearchBar(
         shape = CircleShape,
         singleLine = true,
         colors = OutlinedTextFieldDefaults.colors(
-            focusedContainerColor = MaterialTheme.colorScheme.surface,
-            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-            disabledContainerColor = MaterialTheme.colorScheme.surface,
+            focusedContainerColor = MaterialTheme.colorScheme.primary,
+            unfocusedContainerColor = MaterialTheme.colorScheme.primary,
+            disabledContainerColor = MaterialTheme.colorScheme.primary,
             cursorColor = MaterialTheme.colorScheme.onSurface,
             focusedLeadingIconColor = MaterialTheme.colorScheme.onSurface,
             focusedTrailingIconColor = MaterialTheme.colorScheme.onSurface,
@@ -154,7 +154,7 @@ fun CustomSearchBar(
             },
     )
 
-    BackHandler(enabled = isSearching) {
+    BackHandler(enabled = (isSearching || query.isNotBlank())) {
         closeSearch()
     }
 }
