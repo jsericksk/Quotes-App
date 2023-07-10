@@ -7,8 +7,6 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.kproject.quotes.commom.ResultState
 import com.kproject.quotes.commom.constants.PrefsConstants
-import com.kproject.quotes.data.fromJson
-import com.kproject.quotes.data.toJson
 import com.kproject.quotes.domain.model.LoggedInUserModel
 import com.kproject.quotes.domain.model.quotes.QuoteModel
 import com.kproject.quotes.domain.repository.QuotesRepository
@@ -18,6 +16,8 @@ import com.kproject.quotes.domain.usecase.quotes.validation.QuoteInputValidation
 import com.kproject.quotes.presentation.model.PostQuote
 import com.kproject.quotes.presentation.model.Quote
 import com.kproject.quotes.presentation.model.fromModel
+import com.kproject.quotes.commom.fromJson
+import com.kproject.quotes.commom.toJson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

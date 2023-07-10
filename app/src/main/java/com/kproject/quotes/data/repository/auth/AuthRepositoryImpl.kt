@@ -4,19 +4,19 @@ import com.auth0.android.jwt.JWT
 import com.kproject.quotes.commom.ResultState
 import com.kproject.quotes.commom.constants.PrefsConstants
 import com.kproject.quotes.commom.exception.AuthException
+import com.kproject.quotes.data.remote.model.toErrorResponse
 import com.kproject.quotes.data.remote.service.AuthApiService
-import com.kproject.quotes.data.toErrorResponse
-import com.kproject.quotes.data.toJson
 import com.kproject.quotes.domain.model.LoggedInUserModel
 import com.kproject.quotes.domain.model.auth.LoginModel
 import com.kproject.quotes.domain.model.auth.SignUpModel
 import com.kproject.quotes.domain.repository.AuthRepository
 import com.kproject.quotes.domain.repository.PreferenceRepository
+import com.kproject.quotes.commom.toJson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-const val EmailNotAvailableCode = "email_already_exists"
-const val UsernameNotAvailableCode = "username_already_exists"
+private const val EmailNotAvailableCode = "email_already_exists"
+private const val UsernameNotAvailableCode = "username_already_exists"
 
 class AuthRepositoryImpl(
     private val tokenManagerRepository: TokenManagerRepository,

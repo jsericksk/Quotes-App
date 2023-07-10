@@ -6,9 +6,9 @@ import com.kproject.quotes.data.remote.model.auth.TokensResponse
 import com.kproject.quotes.data.remote.service.ApiConstants
 import com.kproject.quotes.data.remote.service.AuthApiService
 import com.kproject.quotes.data.repository.auth.TokenManagerRepository
-import com.kproject.quotes.data.toJson
 import com.kproject.quotes.domain.model.LoggedInUserModel
 import com.kproject.quotes.domain.repository.PreferenceRepository
+import com.kproject.quotes.commom.toJson
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request

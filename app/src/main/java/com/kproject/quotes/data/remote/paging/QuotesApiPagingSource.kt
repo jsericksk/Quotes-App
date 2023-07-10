@@ -5,12 +5,12 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.kproject.quotes.commom.exception.QuoteException
 import com.kproject.quotes.data.remote.model.quotes.toQuoteModel
+import com.kproject.quotes.data.remote.model.toErrorResponse
 import com.kproject.quotes.data.remote.service.QuotesApiService
-import com.kproject.quotes.data.toErrorResponse
 import com.kproject.quotes.domain.model.quotes.QuoteModel
 
-const val QuoteNotFoundCode = "search_without_results"
-const val UserWithoutPostsCode = "user_without_posts"
+private const val QuoteNotFoundCode = "search_without_results"
+private const val UserWithoutPostsCode = "user_without_posts"
 
 class QuotesApiPagingSource(
     private val quotesApiService: QuotesApiService,
