@@ -154,7 +154,7 @@ fun CustomSearchBar(
             },
     )
 
-    BackHandler(enabled = (isSearching || query.isNotBlank())) {
+    BackHandler(enabled = isSearching) {
         closeSearch()
     }
 }
