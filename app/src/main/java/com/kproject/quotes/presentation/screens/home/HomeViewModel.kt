@@ -38,6 +38,9 @@ class HomeViewModel @Inject constructor(
     private val _quotes = MutableStateFlow<PagingData<Quote>>(PagingData.empty())
     val quotes: StateFlow<PagingData<Quote>> = _quotes
 
+    private val _searchedQuotes = MutableStateFlow<PagingData<Quote>>(PagingData.empty())
+    val searchedQuotes: StateFlow<PagingData<Quote>> = _searchedQuotes
+
     init {
         getQuotes()
         getLoggedInUser()
@@ -64,16 +67,20 @@ class HomeViewModel @Inject constructor(
 
     fun searchQuote() {
         viewModelScope.launch {
+            _uiState.update { it.copy(showSearchResults = true) }
             val searchQuery = _uiState.value.searchQuery
             if (searchQuery.isNotBlank()) {
-                getQuotes(searchQuery)
+                quotesRepository.getAllQuotes(filter = searchQuery).cachedIn(viewModelScope)
+                    .collect { pagingDataModel ->
+                        _searchedQuotes.value = pagingDataModel.map { quoteModel -> quoteModel.fromModel() }
+                    }
             }
         }
     }
 
     fun clearSearchResults() {
         if (_uiState.value.searchQuery.isBlank()) {
-            getQuotes()
+            _uiState.update { it.copy(showSearchResults = false) }
         }
     }
 

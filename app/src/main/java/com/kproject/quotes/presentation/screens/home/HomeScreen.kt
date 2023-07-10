@@ -58,12 +58,14 @@ fun HomeScreen(
     val homeViewModel: HomeViewModel = hiltViewModel()
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val quotes = homeViewModel.quotes.collectAsLazyPagingItems()
+    val searchedQuotes = homeViewModel.searchedQuotes.collectAsLazyPagingItems()
+    val quotesList = if (!uiState.showSearchResults) quotes else searchedQuotes
 
     var showPostBottomSheet by remember { mutableStateOf(false) }
 
     MainContent(
         uiState = uiState,
-        quotes = quotes,
+        quotes = quotesList,
         onSearchQueryChange = homeViewModel::onSearchQueryChange,
         onSearchQuote = {
             homeViewModel.searchQuote()
