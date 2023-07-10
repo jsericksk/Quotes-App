@@ -65,7 +65,7 @@ fun PostBottomSheet(
                 Text(
                     text = bottomSheetTitle,
                     color = MaterialTheme.colorScheme.onSurface,
-                    fontSize = 20.sp,
+                    fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
@@ -161,8 +161,8 @@ private fun TextField(
                 unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurface.copy(0.7f),
                 focusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(0.8f),
                 unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(0.6f),
-                focusedBorderColor = MaterialTheme.colorScheme.primary,
-                unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(0.7f),
+                focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary.copy(0.7f),
                 errorContainerColor = Color.Transparent,
                 errorBorderColor = MaterialTheme.colorScheme.errorContainer.copy(0.7f),
                 errorLabelColor = MaterialTheme.colorScheme.errorContainer,
