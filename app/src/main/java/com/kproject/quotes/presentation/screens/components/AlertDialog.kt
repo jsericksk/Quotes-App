@@ -72,7 +72,7 @@ fun ProgressAlertDialog(showDialog: Boolean, title: String? = null) {
                     Column(
                         modifier = Modifier
                             .background(
-                                color = MaterialTheme.colorScheme.background,
+                                color = MaterialTheme.colorScheme.surface,
                                 shape = MaterialTheme.shapes.extraLarge
                             )
                             .padding(defaultDialogPadding)

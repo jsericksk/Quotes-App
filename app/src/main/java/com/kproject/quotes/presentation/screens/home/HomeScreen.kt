@@ -136,12 +136,12 @@ private fun MainContent(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onPostQuote,
-                containerColor = MaterialTheme.colorScheme.secondary,
+                containerColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.outline_add_24),
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurface
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
         }
