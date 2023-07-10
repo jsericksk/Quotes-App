@@ -97,7 +97,7 @@ fun ProgressAlertDialog(showDialog: Boolean, title: String? = null) {
                         modifier = Modifier
                             .size(100.dp)
                             .background(
-                                color = MaterialTheme.colorScheme.background,
+                                color = MaterialTheme.colorScheme.surface,
                                 shape = MaterialTheme.shapes.extraLarge
                             )
                     ) {

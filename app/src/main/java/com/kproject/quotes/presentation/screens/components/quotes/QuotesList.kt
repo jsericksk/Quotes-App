@@ -209,6 +209,7 @@ private fun QuotesListItem(
                         overflow = TextOverflow.Ellipsis,
                         textAlign = TextAlign.Center
                     )
+                    Spacer(Modifier.height(6.dp))
                     Text(
                         text = "— " + quote.author,
                         color = MaterialTheme.colorScheme.onSurface,
