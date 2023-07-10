@@ -155,7 +155,7 @@ private fun MainContent(
                 onSearch = onSearchQuote,
                 onSearchActive = { isActive ->
                     if (!isActive) {
-                        // onClearSearch.invoke()
+                        onClearSearch.invoke()
                     }
                 },
                 trailingIcon = {

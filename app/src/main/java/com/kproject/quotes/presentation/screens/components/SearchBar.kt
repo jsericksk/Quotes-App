@@ -70,7 +70,7 @@ fun CustomSearchBar(
             color = MaterialTheme.colorScheme.onPrimary,
             fontSize = 18.sp
         ),
-        label = {
+        placeholder = {
             Text(
                 text = stringResource(id = R.string.search_quotes),
                 color = MaterialTheme.colorScheme.onSurface.copy(0.9f)
@@ -138,8 +138,8 @@ fun CustomSearchBar(
             focusedTrailingIconColor = MaterialTheme.colorScheme.onSurface,
             unfocusedLeadingIconColor = MaterialTheme.colorScheme.onSurface.copy(0.7f),
             unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurface.copy(0.7f),
-            focusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(0.8f),
-            unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(0.6f),
+            focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(0.8f),
+            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(0.6f),
             focusedBorderColor = Color.Transparent,
             unfocusedBorderColor = Color.Transparent,
             selectionColors = TextSelectionColors(
@@ -151,7 +151,7 @@ fun CustomSearchBar(
             .fillMaxWidth()
             .onFocusChanged { focusState ->
                 isSearching = focusState.hasFocus
-            }
+            },
     )
 
     BackHandler(enabled = isSearching) {
