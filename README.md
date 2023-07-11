@@ -16,6 +16,8 @@ Projeto criado com o objetivo de consumir a minha [API de frases](https://github
 
 Como objetivo principal, a ideia era apenas consumir a API. Como objetivo secundário, eu queria aprender melhor na prática a abordagem dos tokens, desde a utilização do **OkHttp** para interceptar as requests com access token/tentativa de obter um novo access token a partir de um refresh token, até a forma de armazenamento dos tokens em si.
 
+Foi utilizado o [Render](https://render.com) para hospedar a API para testes no app. Apesar da URL estar disponível no código, a API não está disponível para uso público e é provável que já tenha sido excluída quando estiver lendo isso.
+
 ## :pencil2: Funcionalidades
 
 - Registro e login de usuário;
